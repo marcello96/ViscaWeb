@@ -1,0 +1,9 @@
+server.port: 8080
+spring.profiles.active: local
+
+serial:
+  port: COM3
+  baudrate: 9600
+  databits: 8
+  stopbits: 1
+  parity: 0
