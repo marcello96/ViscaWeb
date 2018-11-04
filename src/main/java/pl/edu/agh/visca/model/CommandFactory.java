@@ -1,20 +1,22 @@
 package pl.edu.agh.visca.model;
 
+import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class CommandFactory {
 
-    public static List<Cmd> createCommandList(String[] inputCommands) {
+    public List<Cmd> createCommandList(String[] inputCommands) {
         return Stream.of(inputCommands)
-                .map(CommandFactory::createCommand)
+                .map(this::createCommand)
                 .collect(Collectors.toList());
     }
 
-    private static Cmd createCommand(String inputCommand) {
+    private Cmd createCommand(String inputCommand) {
         if (inputCommand.startsWith(CommandName.WAIT.name())) {
             return getWaitCommand(inputCommand);
         }
@@ -46,7 +48,7 @@ public class CommandFactory {
         return CommandName.valueOf(inputCommand).getCommand();
     }
 
-    private static Cmd getWaitCommand(String inputCommand) {
+    private Cmd getWaitCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
         String time = inputCommand.substring(pos + 1);
         WaitCmd cmd = (WaitCmd) CommandName.WAIT.getCommand();
@@ -61,7 +63,7 @@ public class CommandFactory {
         return cmd;
     }
 
-    private static Cmd getZoomTeleCommand(String inputCommand) {
+    private Cmd getZoomTeleCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ZoomTeleStdCmd cmd = (ZoomTeleStdCmd) CommandName.ZOOM_TELE.getCommand();
@@ -81,7 +83,7 @@ public class CommandFactory {
         return cmd;
     }
 
-    private static Cmd getZoomWideCommand(String inputCommand) {
+    private Cmd getZoomWideCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ZoomWideStdCmd cmd = (ZoomWideStdCmd) CommandName.ZOOM_WIDE.getCommand();
@@ -102,7 +104,7 @@ public class CommandFactory {
         return cmd;
     }
 
-    private static Cmd getPanTiltUpCommand(String inputCommand) {
+    private Cmd getPanTiltUpCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -130,7 +132,7 @@ public class CommandFactory {
         return cmd;
     }
 
-    private static Cmd getPanTiltDownCommand(String inputCommand) {
+    private Cmd getPanTiltDownCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -159,7 +161,7 @@ public class CommandFactory {
         return cmd;
     }
 
-    private static Cmd getPanTiltLeftCommand(String inputCommand) {
+    private Cmd getPanTiltLeftCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -188,7 +190,7 @@ public class CommandFactory {
         return cmd;
     }
 
-    private static Cmd getPanTiltRightCommand(String inputCommand) {
+    private Cmd getPanTiltRightCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
