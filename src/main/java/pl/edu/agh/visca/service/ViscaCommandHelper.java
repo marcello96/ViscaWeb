@@ -8,7 +8,7 @@ import pl.edu.agh.visca.cmd.WaitCmd;
 
 public class ViscaCommandHelper {
 
-    public static void sendCommand(SerialPort serialPort, Cmd command) {
+    static void sendCommand(SerialPort serialPort, Cmd command) {
 
         if (command instanceof WaitCmd) {
             sleep(((WaitCmd) command).getTime());
@@ -24,14 +24,12 @@ public class ViscaCommandHelper {
             System.out.println("@ " + byteArrayToString(cmdData));
 
             serialPort.writeBytes(cmdData);
-        } catch (SerialPortException e) {
-            e.printStackTrace();
-        } catch (RuntimeException e) {
+        } catch (SerialPortException | RuntimeException e) {
             e.printStackTrace();
         }
     }
 
-    public static void readResponse(SerialPort serialPort){
+    static void readResponse(SerialPort serialPort) {
         byte[] response;
         try {
             response = ViscaResponseReader.readResponse(serialPort);
@@ -45,20 +43,17 @@ public class ViscaCommandHelper {
 
     private static String byteArrayToString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
-        byte[] var5 = bytes;
-        int var4 = bytes.length;
 
-        for(int var3 = 0; var3 < var4; ++var3) {
-            byte b = var5[var3];
+        for (byte b : bytes) {
             sb.append(String.format("%02X ", b));
         }
 
         return sb.toString();
     }
 
-    private static void sleep(int timeSec) {
+    public static void sleep(int timeSec) {
         try {
-            Thread.sleep((long)(timeSec * 1000));
+            Thread.sleep((long) (timeSec * 1000));
         } catch (InterruptedException var2) {
             var2.printStackTrace();
         }

@@ -1,7 +1,6 @@
 package pl.edu.agh.visca.model;
 
 import pl.edu.agh.visca.cmd.*;
-import pl.edu.agh.visca.cmd.WaitCmd;
 
 public enum CommandName {
     ADDRESS(new AddressCmd()),

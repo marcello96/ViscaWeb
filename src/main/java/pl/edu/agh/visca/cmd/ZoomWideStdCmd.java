@@ -8,21 +8,37 @@ package pl.edu.agh.visca.cmd;
 import pl.edu.agh.visca.model.Constants;
 
 public final class ZoomWideStdCmd extends Cmd {
-    private static final byte[] ptWideStdCommandData = new byte[]{1, 4, 7, 3};
+    private static final byte[] ptWideStdCommandData = new byte[]{1, 4, 7, 0x00};
 
     public ZoomWideStdCmd() {
-        super(Constants.getDestinationAddress());
-
+        super(Constants.DESTINATION_ADDRESS);
+        setSpeed(CONSTANT_SPEED.DEFAULT_SPEED);
     }
 
+    public void setSpeed(final CONSTANT_SPEED speed) {
+        ptWideStdCommandData[3] = speed.value;
+    }
+
+    @Override
     public byte[] createCommandData() {
-        byte[] cmdData = duplicatArray(ptWideStdCommandData);
-        return cmdData;
+        return duplicateArray(ptWideStdCommandData);
     }
 
-    private static byte[] duplicatArray(byte[] src) {
-        byte[] dest = new byte[src.length];
-        System.arraycopy(src, 0, dest, 0, src.length);
-        return dest;
+    public enum CONSTANT_SPEED {
+        DEFAULT_SPEED((byte) 0x03),
+        SPEED0((byte) 0x30),
+        SPEED1((byte) 0x31),
+        SPEED2((byte) 0x32),
+        SPEED3((byte) 0x33),
+        SPEED4((byte) 0x34),
+        SPEED5((byte) 0x35),
+        SPEED6((byte) 0x36),
+        SPEED7((byte) 0x37);
+
+        private byte value;
+
+        CONSTANT_SPEED(byte value) {
+            this.value = value;
+        }
     }
 }

@@ -11,18 +11,12 @@ public final class ClearAllCmd extends Cmd {
     private static final byte[] clearAllCommandData = new byte[]{1, 0, 1};
 
     public ClearAllCmd() {
-        super(Constants.getServerAddress());
+        super(Constants.SERVER_ADDRESS);
 
     }
 
+    @Override
     public byte[] createCommandData() {
-        byte[] cmdData = duplicatArray(clearAllCommandData);
-        return cmdData;
-    }
-
-    private static byte[] duplicatArray(byte[] src) {
-        byte[] dest = new byte[src.length];
-        System.arraycopy(src, 0, dest, 0, src.length);
-        return dest;
+        return duplicateArray(clearAllCommandData);
     }
 }

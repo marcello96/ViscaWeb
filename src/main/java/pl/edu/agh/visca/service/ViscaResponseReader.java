@@ -10,20 +10,18 @@ import jssc.SerialPortException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class ViscaResponseReader {
+class ViscaResponseReader {
     private static final long TIMEOUT_MS = 5000L;
 
-    public ViscaResponseReader() {
-    }
-
-    public static byte[] readResponse(SerialPort serialPort) throws ViscaResponseReader.TimeoutException, SerialPortException {
-        ArrayList<Byte> data = new ArrayList();
+    static byte[] readResponse(SerialPort serialPort) throws ViscaResponseReader.TimeoutException, SerialPortException {
+        List<Byte> data = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
         long timeDiff;
         do {
-            while(serialPort.getInputBufferBytesCount() != 0) {
+            while (serialPort.getInputBufferBytesCount() != 0) {
                 byte[] responseData = serialPort.readBytes(1);
                 Byte b = responseData[0];
                 data.add(b);
@@ -32,8 +30,8 @@ public class ViscaResponseReader {
                     int idx = 0;
 
 //                    Byte b;
-                    for(Iterator var7 = data.iterator(); var7.hasNext(); responseData[idx++] = b.byteValue()) {
-                        b = (Byte)var7.next();
+                    for (Iterator var7 = data.iterator(); var7.hasNext(); responseData[idx++] = b.byteValue()) {
+                        b = (Byte) var7.next();
                     }
 
                     return responseData;
@@ -42,13 +40,13 @@ public class ViscaResponseReader {
 
             long currentTime = System.currentTimeMillis();
             timeDiff = currentTime - startTime;
-        } while(timeDiff <= 5000L);
+        } while (timeDiff <= TIMEOUT_MS);
 
         throw new ViscaResponseReader.TimeoutException();
     }
 
     public static class TimeoutException extends Exception {
-        public TimeoutException() {
+        TimeoutException() {
         }
 
         public TimeoutException(String message, Throwable cause) {

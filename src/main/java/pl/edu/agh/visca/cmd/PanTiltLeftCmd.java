@@ -8,23 +8,22 @@ package pl.edu.agh.visca.cmd;
 import pl.edu.agh.visca.model.Constants;
 
 public final class PanTiltLeftCmd extends Cmd {
-    private static final byte[] ptLeftCommandData = new byte[]{1, 6, 1, 0, 0, 1, 3};
+    private static final byte[] ptLeftCommandData = new byte[]{1, 6, 1, 0x00, 0x00, 1, 3};
 
     public PanTiltLeftCmd() {
-        super(Constants.getDestinationAddress());
-
+        super(Constants.DESTINATION_ADDRESS);
+        setSpeed(ConstantPanSpeed.LEVEL08, ConstantTiltSpeed.LEVEL01);
     }
 
+    @Override
     public byte[] createCommandData() {
-        byte[] cmdData = duplicatArray(ptLeftCommandData);
-        cmdData[3] = 8;
-        cmdData[4] = 1;
-        return cmdData;
+        /*cmdData[3] = 8;
+        cmdData[4] = 1;*/
+        return duplicateArray(ptLeftCommandData);
     }
 
-    private static byte[] duplicatArray(byte[] src) {
-        byte[] dest = new byte[src.length];
-        System.arraycopy(src, 0, dest, 0, src.length);
-        return dest;
+    public void setSpeed(ConstantPanSpeed panSpeed, ConstantTiltSpeed tiltSpeed) {
+        ptLeftCommandData[3] = panSpeed.getByteValue();
+        ptLeftCommandData[4] = tiltSpeed.getByteValue();
     }
 }

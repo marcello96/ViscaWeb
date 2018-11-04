@@ -11,18 +11,11 @@ public final class PanTiltHomeCmd extends Cmd {
     private static final byte[] ptHomeCommandData = new byte[]{1, 6, 4};
 
     public PanTiltHomeCmd() {
-        super(Constants.getDestinationAddress());
-
+        super(Constants.DESTINATION_ADDRESS);
     }
 
+    @Override
     public byte[] createCommandData() {
-        byte[] cmdData = duplicatArray(ptHomeCommandData);
-        return cmdData;
-    }
-
-    private static byte[] duplicatArray(byte[] src) {
-        byte[] dest = new byte[src.length];
-        System.arraycopy(src, 0, dest, 0, src.length);
-        return dest;
+        return duplicateArray(ptHomeCommandData);
     }
 }

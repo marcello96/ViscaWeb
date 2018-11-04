@@ -17,4 +17,10 @@ public abstract class Cmd {
     public byte getDestination() {
         return destination;
     }
+
+    protected static byte[] duplicateArray(byte[] src) {
+        byte[] dest = new byte[src.length];
+        System.arraycopy(src, 0, dest, 0, src.length);
+        return dest;
+    }
 }
