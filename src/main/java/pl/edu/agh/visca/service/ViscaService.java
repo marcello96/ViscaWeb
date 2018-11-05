@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.AddressCmd;
 import pl.edu.agh.visca.cmd.Cmd;
 import pl.edu.agh.visca.cmd.PanTiltHomeCmd;
+import pl.edu.agh.visca.model.Constants;
 
 import java.util.List;
 
@@ -48,13 +49,8 @@ public class ViscaService {
         commandList.forEach(this::runCommand);
     }
 
-    private static String[] parseInput(String userInput) {
-        if (userInput.startsWith("macro:")) {
-            String commands = userInput.substring(6);
-
-            return commands.split(";");
-        }
-        return new String[] {userInput};
+    public void setDestDeviceAddress(byte destDeviceAddress) {
+        Constants.DESTINATION_ADDRESS = destDeviceAddress;
     }
 
     private void startSerial() throws SerialPortException {

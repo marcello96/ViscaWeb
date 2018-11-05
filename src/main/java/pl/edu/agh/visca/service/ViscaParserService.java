@@ -9,24 +9,40 @@ import java.util.List;
 @Service
 public class ViscaParserService {
 
-    private CommandFactory commandFactory;
+    private static final String MACRO_DEF = "macrodef:";
+    private static final String MACRO_RUN = "macrorun:";
 
-    public ViscaParserService(CommandFactory commandFactory) {
+    private final CommandFactory commandFactory;
+    private final ViscaMacroHolder viscaMacroHolder;
+
+    public ViscaParserService(CommandFactory commandFactory, ViscaMacroHolder viscaMacroHolder) {
         this.commandFactory = commandFactory;
+        this.viscaMacroHolder = viscaMacroHolder;
     }
 
 
     public List<Cmd> parseCommandInput(String input) {
-        return commandFactory.createCommandList(parseInput(input));
+        if (input.startsWith(MACRO_DEF)) {
+            String commands = input.substring(MACRO_DEF.length());
+
+            return createMacro(commands);
+        } else if (input.startsWith(MACRO_RUN)) {
+            String name = input.substring(MACRO_RUN.length());
+
+            return viscaMacroHolder.getMacro(name);
+        }
+
+        return commandFactory.createCommandList(new String[] {input});
     }
 
 
-    private String[] parseInput(String userInput) {
-        if (userInput.startsWith("macro:")) {
-            String commands = userInput.substring(6);
+    private List<Cmd> createMacro(String input) {
+        int endOfNamePos = input.indexOf("=");
+        String name = input.substring(0, endOfNamePos);
+        String commands = input.substring(endOfNamePos + 1);
+        List<Cmd> cmdList = commandFactory.createCommandList(commands.split(";"));
 
-            return commands.split(";");
-        }
-        return new String[] {userInput};
+        viscaMacroHolder.addMacro(name, cmdList);
+        return cmdList;
     }
 }

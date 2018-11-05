@@ -125,8 +125,7 @@ public class CommandFactory {
         try {
             cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
         } catch (IllegalArgumentException e) {
-            System.out.println("Wrong format should be a constant in ConstantPanSpeed and in ConstantTiltSpeed" + e.getMessage());
-            e.printStackTrace();
+            throw handlePanTiltException(e);
         }
 
         return cmd;
@@ -154,8 +153,7 @@ public class CommandFactory {
         try {
             cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
         } catch (IllegalArgumentException e) {
-            System.out.println("Wrong format should be a constant in ConstantPanSpeed and in ConstantTiltSpeed" + e.getMessage());
-            e.printStackTrace();
+            throw handlePanTiltException(e);
         }
 
         return cmd;
@@ -183,8 +181,7 @@ public class CommandFactory {
         try {
             cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
         } catch (IllegalArgumentException e) {
-            System.out.println("Wrong format should be a constant in ConstantPanSpeed and in ConstantTiltSpeed" + e.getMessage());
-            e.printStackTrace();
+            throw handlePanTiltException(e);
         }
 
         return cmd;
@@ -212,10 +209,13 @@ public class CommandFactory {
         try {
             cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
         } catch (IllegalArgumentException e) {
-            System.out.println("Wrong format should be a constant in ConstantPanSpeed and in ConstantTiltSpeed" + e.getMessage());
-            e.printStackTrace();
+            throw handlePanTiltException(e);
         }
 
         return cmd;
+    }
+
+    private IllegalArgumentException handlePanTiltException(Exception e) {
+        return new IllegalArgumentException("Wrong format should be a constant in ConstantPanSpeed and in ConstantTiltSpeed: ", e);
     }
 }

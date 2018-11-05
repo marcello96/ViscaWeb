@@ -20,7 +20,9 @@ public class ViscaController {
     }
 
     @GetMapping("/run")
-    public ResponseEntity runCommand(@RequestParam("cmd") String cmd) {
+    public ResponseEntity<String> runCommand(@RequestParam("cmd") String cmd,
+                                             @RequestParam(value = "device", defaultValue = "1") byte deviceAddress) {
+        viscaService.setDestDeviceAddress(deviceAddress);
         viscaService.runCommandList(viscaParserService.parseCommandInput(cmd));
 
         return ResponseEntity.ok("Run succeed!");
