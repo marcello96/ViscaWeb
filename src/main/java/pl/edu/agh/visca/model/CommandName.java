@@ -1,7 +1,11 @@
 package pl.edu.agh.visca.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import pl.edu.agh.visca.cmd.*;
 
+@AllArgsConstructor
+@Getter
 public enum CommandName {
     ADDRESS(new AddressCmd()),
     CLEAR_ALL(new ClearAllCmd()),
@@ -16,12 +20,4 @@ public enum CommandName {
     WAIT(new WaitCmd());
 
     private Cmd command;
-
-    public Cmd getCommand() {
-        return command;
-    }
-
-    CommandName(Cmd command) {
-        this.command = command;
-    }
 }

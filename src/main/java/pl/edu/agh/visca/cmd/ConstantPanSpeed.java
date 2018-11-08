@@ -1,5 +1,10 @@
 package pl.edu.agh.visca.cmd;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum ConstantPanSpeed {
 
     LEVEL01((byte) 0x01),
@@ -28,12 +33,4 @@ public enum ConstantPanSpeed {
     LEVEL18((byte) 0x18);
 
     private byte value;
-
-    ConstantPanSpeed(byte value) {
-        this.value = value;
-    }
-
-    public byte getByteValue() {
-        return value;
-    }
 }

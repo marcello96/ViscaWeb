@@ -2,20 +2,31 @@ package pl.edu.agh.visca.service;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.Cmd;
 import pl.edu.agh.visca.cmd.ViscaCommand;
 import pl.edu.agh.visca.cmd.WaitCmd;
+import pl.edu.agh.visca.service.exception.TimeoutException;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static pl.edu.agh.visca.service.SleepUtility.sleep;
+
+@Service
+@AllArgsConstructor
 public class ViscaCommandHelper {
+    private ViscaResponseReader viscaResponseReader;
 
-    static void sendCommand(SerialPort serialPort, Cmd command) {
-
+    public void sendCommand(SerialPort serialPort, Cmd command) {
         if (command instanceof WaitCmd) {
             sleep(((WaitCmd) command).getTime());
             return;
         }
-        byte[] cmdData = command.createCommandData();
+
         try {
+            byte[] cmdData = command.createCommandData();
             ViscaCommand vCmd = new ViscaCommand();
             vCmd.commandData = cmdData;
             vCmd.sourceAdr = 0;
@@ -29,35 +40,17 @@ public class ViscaCommandHelper {
         }
     }
 
-    static void readResponse(SerialPort serialPort) {
-        byte[] response;
+    public void readResponse(SerialPort serialPort) {
         try {
-            response = ViscaResponseReader.readResponse(serialPort);
+            byte[] response = viscaResponseReader.readResponse(serialPort);
             System.out.println("> " + byteArrayToString(response));
-        } catch (ViscaResponseReader.TimeoutException var15) {
-            System.out.println("! TIMEOUT exception");
-        } catch (SerialPortException e) {
+        } catch (TimeoutException | SerialPortException e) {
             e.printStackTrace();
         }
     }
 
-    private static String byteArrayToString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-
-        for (byte b : bytes) {
-            sb.append(String.format("%02X ", b));
-        }
-
-        return sb.toString();
+    private String byteArrayToString(byte[] bytes) {
+        return Stream.of(bytes).map(b -> String.format("%02X", b))
+                .collect(Collectors.joining(" "));
     }
-
-    public static void sleep(int timeSec) {
-        try {
-            Thread.sleep((long) (timeSec * 1000));
-        } catch (InterruptedException var2) {
-            var2.printStackTrace();
-        }
-
-    }
-
 }

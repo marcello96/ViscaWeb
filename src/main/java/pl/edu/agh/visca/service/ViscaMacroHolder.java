@@ -1,26 +1,28 @@
 package pl.edu.agh.visca.service;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 import pl.edu.agh.visca.cmd.Cmd;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Repository
+@AllArgsConstructor
 public class ViscaMacroHolder {
 
-    private final Map<String, List<Cmd>> macroMap;
-
-    public ViscaMacroHolder() {
-        macroMap = new HashMap<>();
-    }
+    @NonNull private final Multimap<String, Cmd> macroMap = ArrayListMultimap.create();
 
     public void addMacro(String name, List<Cmd> commands) {
-        macroMap.put(name, commands);
+        macroMap.putAll(name, commands);
     }
 
     public List<Cmd> getMacro(String name) {
-        return macroMap.get(name);
+        Preconditions.checkArgument(!macroMap.isEmpty() && macroMap.containsKey(name));
+        return new ArrayList<>(macroMap.get(name));
     }
 }

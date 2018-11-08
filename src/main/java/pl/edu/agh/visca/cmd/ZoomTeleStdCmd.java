@@ -5,6 +5,8 @@
 
 package pl.edu.agh.visca.cmd;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import pl.edu.agh.visca.model.Constants;
 
 public final class ZoomTeleStdCmd extends Cmd {
@@ -24,6 +26,8 @@ public final class ZoomTeleStdCmd extends Cmd {
         return duplicateArray(ptTeleStdCommandData);
     }
 
+    @AllArgsConstructor
+    @Getter
     public enum CONSTANT_SPEED {
         DEFAULT_SPEED((byte) 0x02),
         SPEED0((byte) 0x20),
@@ -36,10 +40,5 @@ public final class ZoomTeleStdCmd extends Cmd {
         SPEED7((byte) 0x27);
 
         private byte value;
-
-        CONSTANT_SPEED(byte value) {
-            this.value = value;
-        }
-
     }
 }

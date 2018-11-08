@@ -1,5 +1,10 @@
 package pl.edu.agh.visca.cmd;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum ConstantTiltSpeed {
 
     LEVEL01((byte) 0x01),
@@ -24,12 +29,4 @@ public enum ConstantTiltSpeed {
     LEVEL14((byte) 0x14);
 
     private byte value;
-
-    ConstantTiltSpeed(byte value) {
-        this.value = value;
-    }
-
-    public byte getByteValue() {
-        return value;
-    }
 }

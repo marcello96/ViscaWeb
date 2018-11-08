@@ -5,18 +5,15 @@
 
 package pl.edu.agh.visca.cmd;
 
-public abstract class Cmd {
-    public Cmd(byte destination) {
-        this.destination = destination;
-    }
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@AllArgsConstructor
+@Getter
+public abstract class Cmd {
     private byte destination;
 
     public abstract byte[] createCommandData();
-
-    public byte getDestination() {
-        return destination;
-    }
 
     protected static byte[] duplicateArray(byte[] src) {
         byte[] dest = new byte[src.length];

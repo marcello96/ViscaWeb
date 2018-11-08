@@ -26,6 +26,17 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.jssc</groupId>
+			<artifactId>jssc</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.visca</groupId>
+			<artifactId>visca</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
@@ -44,10 +55,27 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>27.0-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0</version>
+		</dependency>
 
 	</dependencies>
 
 	<build>
+		<defaultGoal>install</defaultGoal>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -55,6 +83,47 @@
 				<configuration>
 					<includeSystemScope>true</includeSystemScope>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+				<executions>
+					<execution>
+						<id>install-external-1</id>
+						<phase>clean</phase>
+						<configuration>
+							<file>${project.basedir}/visca_lib/jssc.jar</file>
+							<repositoryLayout>default</repositoryLayout>
+							<groupId>com.jssc</groupId>
+							<artifactId>jssc</artifactId>
+							<version>1.0.0</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>install-external-2</id>
+						<phase>clean</phase>
+						<configuration>
+							<file>${project.basedir}/visca.jar</file>
+							<repositoryLayout>default</repositoryLayout>
+							<groupId>com.visca</groupId>
+							<artifactId>visca</artifactId>
+							<version>1.0.0</version>
+							<packaging>jar</packaging>
+							<generatePom>true</generatePom>
+						</configuration>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -7,15 +7,18 @@ package pl.edu.agh.visca.service;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import org.springframework.stereotype.Service;
+import pl.edu.agh.visca.service.exception.TimeoutException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-class ViscaResponseReader {
+@Service
+public class ViscaResponseReader {
     private static final long TIMEOUT_MS = 5000L;
 
-    static byte[] readResponse(SerialPort serialPort) throws ViscaResponseReader.TimeoutException, SerialPortException {
+    public byte[] readResponse(SerialPort serialPort) throws SerialPortException, TimeoutException {
         List<Byte> data = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
@@ -29,8 +32,7 @@ class ViscaResponseReader {
                     responseData = new byte[data.size()];
                     int idx = 0;
 
-//                    Byte b;
-                    for (Iterator var7 = data.iterator(); var7.hasNext(); responseData[idx++] = b.byteValue()) {
+                    for (Iterator var7 = data.iterator(); var7.hasNext(); responseData[idx++] = b) {
                         b = (Byte) var7.next();
                     }
 
@@ -42,19 +44,6 @@ class ViscaResponseReader {
             timeDiff = currentTime - startTime;
         } while (timeDiff <= TIMEOUT_MS);
 
-        throw new ViscaResponseReader.TimeoutException();
-    }
-
-    public static class TimeoutException extends Exception {
-        TimeoutException() {
-        }
-
-        public TimeoutException(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        public TimeoutException(String message) {
-            super(message);
-        }
+        throw new TimeoutException("Waiting too loong");
     }
 }

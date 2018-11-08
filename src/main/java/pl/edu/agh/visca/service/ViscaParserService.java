@@ -1,5 +1,6 @@
 package pl.edu.agh.visca.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.Cmd;
 import pl.edu.agh.visca.model.CommandFactory;
@@ -7,6 +8,7 @@ import pl.edu.agh.visca.model.CommandFactory;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ViscaParserService {
 
     private static final String MACRO_DEF = "macrodef:";
@@ -14,11 +16,6 @@ public class ViscaParserService {
 
     private final CommandFactory commandFactory;
     private final ViscaMacroHolder viscaMacroHolder;
-
-    public ViscaParserService(CommandFactory commandFactory, ViscaMacroHolder viscaMacroHolder) {
-        this.commandFactory = commandFactory;
-        this.viscaMacroHolder = viscaMacroHolder;
-    }
 
 
     public List<Cmd> parseCommandInput(String input) {
@@ -34,7 +31,6 @@ public class ViscaParserService {
 
         return commandFactory.createCommandList(new String[] {input});
     }
-
 
     private List<Cmd> createMacro(String input) {
         int endOfNamePos = input.indexOf("=");

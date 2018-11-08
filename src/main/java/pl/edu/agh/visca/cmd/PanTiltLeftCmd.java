@@ -23,7 +23,7 @@ public final class PanTiltLeftCmd extends Cmd {
     }
 
     public void setSpeed(ConstantPanSpeed panSpeed, ConstantTiltSpeed tiltSpeed) {
-        ptLeftCommandData[3] = panSpeed.getByteValue();
-        ptLeftCommandData[4] = tiltSpeed.getByteValue();
+        ptLeftCommandData[3] = panSpeed.getValue();
+        ptLeftCommandData[4] = tiltSpeed.getValue();
     }
 }

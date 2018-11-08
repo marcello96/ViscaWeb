@@ -10,9 +10,6 @@ public class ViscaCommand {
     public byte destinationAdr;
     public byte[] commandData;
 
-    public ViscaCommand() {
-    }
-
     public byte[] getCommandData() {
         int cmdLen = this.commandData.length + 1 + 1;
         byte[] cmdData = new byte[cmdLen];
