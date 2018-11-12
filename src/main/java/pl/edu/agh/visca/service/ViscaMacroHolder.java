@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ViscaMacroHolder {
 
+    //FIXME: what is this????
     @NonNull private final Multimap<String, Cmd> macroMap = ArrayListMultimap.create();
 
     public void addMacro(String name, List<Cmd> commands) {

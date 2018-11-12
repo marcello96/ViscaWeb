@@ -44,6 +44,6 @@ public class ViscaResponseReader {
             timeDiff = currentTime - startTime;
         } while (timeDiff <= TIMEOUT_MS);
 
-        throw new TimeoutException("Waiting too loong");
+        throw new TimeoutException("Waiting too long");
     }
 }

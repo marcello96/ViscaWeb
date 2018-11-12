@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ViscaParserService {
 
+    //FIXME: what is this????
     private static final String MACRO_DEF = "macrodef:";
     private static final String MACRO_RUN = "macrorun:";
 

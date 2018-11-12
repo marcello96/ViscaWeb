@@ -26,9 +26,4 @@ public class ViscaController {
 
         return ResponseEntity.ok("Run succeed!");
     }
-
-    @RequestMapping("/hello")
-    public String sayHello() {
-        return "Hello Spring boot";
-    }
 }

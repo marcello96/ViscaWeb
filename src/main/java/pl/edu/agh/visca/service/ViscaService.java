@@ -1,8 +1,17 @@
 package pl.edu.agh.visca.service;
 
+import jssc.SerialPort;
 import jssc.SerialPortException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.visca.cmd.AddressCmd;
+import pl.edu.agh.visca.cmd.Cmd;
+import pl.edu.agh.visca.cmd.PanTiltHomeCmd;
+
+import java.util.List;
+
+import static pl.edu.agh.visca.service.SleepUtility.sleep;
 
 @Service
 public class ViscaService {
@@ -13,15 +22,19 @@ public class ViscaService {
     private final int serialDatabits;
     private final int serialStopBits;
     private final int serialParity;
-
     private ViscaResponseReader viscaResponseReader;
+    private ViscaCommandHelper viscaCommandHelper;
 
+    private SerialPort serialPort;
+
+    @Autowired
     public ViscaService(@Value("${serial.port}") String serialPortName,
                         @Value("${serial.baudrate}") int serialBaudrate,
                         @Value("${serial.databits}") int serialDatabits,
                         @Value("${serial.stopbits}") int serialStopBits,
                         @Value("${serial.parity}") int serialParity,
-                        ViscaResponseReader viscaResponseReader) throws SerialPortException {
+                        ViscaResponseReader viscaResponseReader,
+                        ViscaCommandHelper viscaCommandHelper) throws SerialPortException {
 
         this.serialPortName = serialPortName;
         this.serialBaudrate = serialBaudrate;
@@ -29,34 +42,36 @@ public class ViscaService {
         this.serialStopBits = serialStopBits;
         this.serialParity = serialParity;
         this.viscaResponseReader = viscaResponseReader;
+        this.viscaCommandHelper = viscaCommandHelper;
 
-        /*val serialPort = new SerialPort(serialPortName);
+        serialPort = new SerialPort(serialPortName);
 
-        startSerial(serialPort);
-        configDevice(serialPort);*/
+        //FIXME: changing when we have port connection
+        //startSerial();
+        //configDevice(serialPort);
     }
 
-    /*public void runCommand(Cmd command) {
-        ViscaCommandHelper.sendCommand(serialPort, command);
-        ViscaCommandHelper.readResponse(serialPort);
+    public void runCommand(Cmd command) {
+        viscaCommandHelper.sendCommand(serialPort, command);
+        viscaCommandHelper.readResponse(serialPort);
     }
 
     public void runCommandList(List<Cmd> commandList) {
         commandList.forEach(this::runCommand);
     }
 
-    private void startSerial(SerialPort serialPort) throws SerialPortException {
+    private void startSerial() throws SerialPortException {
         serialPort.openPort();
         serialPort.setParams(serialBaudrate, serialDatabits, serialStopBits, serialParity);
     }
 
     private void configDevice(SerialPort serialPort) {
-        ViscaCommandHelper.sendCommand(serialPort, new AddressCmd());
-        ViscaCommandHelper.readResponse(serialPort);
+        viscaCommandHelper.sendCommand(serialPort, new AddressCmd());
+        viscaCommandHelper.readResponse(serialPort);
         sleep(TIME_SLEEPING);
 
-        ViscaCommandHelper.sendCommand(serialPort, new PanTiltHomeCmd());
-        ViscaCommandHelper.readResponse(serialPort);
+        viscaCommandHelper.sendCommand(serialPort, new PanTiltHomeCmd());
+        viscaCommandHelper.readResponse(serialPort);
         sleep(TIME_SLEEPING);
-    }*/
+    }
 }

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <title>VISCA Web Application</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" th:href="@{/resources/vendor/bootstrap-4-0-0-alpha-6.min.css}">
+    <script th:src="@{/resources/vendor/jquery-3-1-1.min.js}"></script>
+    <script th:src="@{/resources/vendor/bootstrap4-0-0-alpha-6.min.js}"></script>
+    <script th:src="@{/resources/js/mainPage.js}"></script>
+
+    <style>
+        .row {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h1 class="text-center">Management of camera via VISCA protocol</h1>
+    </div>
+
+    <div class="row">
+
+        <section class="col-lg-2">
+            <h3>Speed</h3>
+            <form>
+                <div class="from-group">
+                    <input class="form-control" type="number" th:max="${maxSpeed}" min="1" value="8">
+                </div>
+            </form>
+        </section>
+
+        <section class="col-lg-3">
+            <h3>Position</h3>
+            <div class="row">
+                <button class="btn btn-primary col-md-3 offset-md-3 visca-position-up">up</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary col-md-3 visca-position-left">left</button>
+                <button class="btn btn-primary col-md-3 offset-md-3 visca-position-right">right</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary col-md-3 offset-md-3 visca-position-down">down</button>
+            </div>
+        </section>
+
+        <section class="col-lg-4">
+            <h3>Zoom</h3>
+            <div class="row">
+                <button class="btn btn-primary col-md-3 offset-md-3 visca-zoom-tele">tele</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary col-md-3 offset-md-3 visca-zoom-wide">wide</button>
+            </div>
+        </section>
+
+        <section class="col-lg-3">
+            <textarea class="response"></textarea>
+        </section>
+    </div>
+
+    <div class="row">
+        <section>
+            <button type="button" class="btn btn-warning visca-other-home">home</button>
+        </section>
+    </div>
+</div>
+
+</body>
+</html>
