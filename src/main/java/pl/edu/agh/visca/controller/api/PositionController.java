@@ -13,7 +13,7 @@ import pl.edu.agh.visca.service.ViscaCommandHelper;
 import pl.edu.agh.visca.service.exception.TimeoutException;
 
 @RestController
-@RequestMapping("/api/position")
+@RequestMapping("/controller/position")
 @AllArgsConstructor
 public class PositionController {
     private static final Logger logger = LoggerFactory.getLogger(PositionController.class);

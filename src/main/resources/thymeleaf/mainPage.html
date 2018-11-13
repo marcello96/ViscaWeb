@@ -3,12 +3,15 @@
 <head th:fragment="head">
     <title>VISCA Web Application</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" th:href="@{/resources/vendor/bootstrap-4-0-0-alpha-6.min.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script th:src="@{/resources/vendor/jquery-3-1-1.min.js}"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="https://npmcdn.com/bootstrap@4.0.0-alpha.5/dist/js/bootstrap.min.js"></script>
     <script th:src="@{/resources/vendor/bootstrap4-0-0-alpha-6.min.js}"></script>
     <script th:src="@{/resources/js/mainPage.js}"></script>
 
@@ -22,21 +25,35 @@
 
 <div class="container">
     <div class="row">
-        <h1 class="text-center">Management of camera via VISCA protocol</h1>
+        <h1 class="text-center">Controller of camera via VISCA protocol</h1>
     </div>
 
+    <br>
     <div class="row">
-
-        <section class="col-lg-2">
-            <h3>Speed</h3>
+        <section class="col-lg-5">
+            <h3>Speed pan</h3>
             <form>
                 <div class="from-group">
-                    <input class="form-control" type="number" th:max="${maxSpeed}" min="1" value="8">
+                    <select class="form-control">
+                        <option th:each="pan : ${T(pl.edu.agh.visca.cmd.ConstantPanSpeed).values()}" th:value="${pan}"
+                                th:text="${pan.value}"></option>
+                    </select>
+
+                </div>
+            </form>
+            <h3>Speed tilt</h3>
+            <form>
+                <div class="from-group">
+                    <select class="form-control">
+                        <option th:each="tilt : ${T(pl.edu.agh.visca.cmd.ConstantTiltSpeed).values()}"
+                                th:value="${tilt}" th:text="${tilt.value}"></option>
+                    </select>
+
                 </div>
             </form>
         </section>
 
-        <section class="col-lg-3">
+        <section class="col-lg-5">
             <h3>Position</h3>
             <div class="row">
                 <button class="btn btn-primary col-md-3 offset-md-3 visca-position-up">up</button>
@@ -49,8 +66,34 @@
                 <button class="btn btn-primary col-md-3 offset-md-3 visca-position-down">down</button>
             </div>
         </section>
+    </div>
 
-        <section class="col-lg-4">
+    <br>
+    <div class="row">
+        <section class="col-lg-5">
+            <h3>Speed zoom tele</h3>
+            <form>
+                <div class="from-group">
+                    <select class="form-control">
+                        <option th:each="speed : ${T(pl.edu.agh.visca.cmd.ZoomTeleStdCmd.CONSTANT_SPEED).values()}"
+                                th:value="${speed}" th:text="${speed.value}"></option>
+                    </select>
+
+                </div>
+            </form>
+            <h3>Speed zoom wide</h3>
+            <form>
+                <div class="from-group">
+                    <select class="form-control">
+                        <option th:each="speed : ${T(pl.edu.agh.visca.cmd.ZoomWideStdCmd.CONSTANT_SPEED).values()}"
+                                th:value="${speed}" th:text="${speed.value}"></option>
+                    </select>
+
+                </div>
+            </form>
+        </section>
+
+        <section class="col-lg-5">
             <h3>Zoom</h3>
             <div class="row">
                 <button class="btn btn-primary col-md-3 offset-md-3 visca-zoom-tele">tele</button>
@@ -59,16 +102,32 @@
                 <button class="btn btn-primary col-md-3 offset-md-3 visca-zoom-wide">wide</button>
             </div>
         </section>
+    </div>
 
-        <section class="col-lg-3">
-            <textarea class="response"></textarea>
+    <br>
+    <div class="row">
+        <div class="col-lg-5"></div>
+        <section class="col-lg-5">
+            <h3>Return to default position</h3>
+            <button type="button" class="btn btn-warning visca-other-home">home</button>
         </section>
     </div>
 
+    <br>
     <div class="row">
-        <section>
-            <button type="button" class="btn btn-warning visca-other-home">home</button>
+        <h3 class="col-lg-5">Response from visca</h3>
+        <section class="col-lg-5">
+            <textarea class="response" rows="2" cols="50"></textarea>
         </section>
+    </div>
+
+    <br>
+    <div class="row">
+        <h3 class="col-lg-3">Macro command</h3>
+        <section class="col-lg-5">
+            <textarea class="command" rows="2" cols="50"></textarea>
+        </section>
+        <button class="btn btn-primary col-lg-3 col-md-3 offset-md-3 visca-submit-command">Submit</button>
     </div>
 </div>
 

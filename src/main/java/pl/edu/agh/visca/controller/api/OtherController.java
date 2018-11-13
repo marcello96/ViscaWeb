@@ -13,16 +13,15 @@ import pl.edu.agh.visca.service.ViscaCommandHelper;
 import pl.edu.agh.visca.service.exception.TimeoutException;
 
 @RestController
-@RequestMapping("/api/other")
+@RequestMapping("/controller/other")
 @AllArgsConstructor
 public class OtherController {
-
     private static final Logger logger = LoggerFactory.getLogger(OtherController.class);
 
     private final ViscaCommandHelper viscaCommandHelper;
 
     @RequestMapping(method = RequestMethod.POST)
-    private ResponseEntity changePosition(@RequestParam String command)
+    private ResponseEntity changePosition(@RequestParam String command, @RequestParam byte speed)
         throws SerialPortException, TimeoutException {
 
         String response = null;

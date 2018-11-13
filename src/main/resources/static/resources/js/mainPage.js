@@ -44,21 +44,24 @@ $(function () {
         };
         postAPI('/zoom', data);
     });
+
     $('.visca-other-home').on('click', function () {
-        var data = {
-            'command': 'HOME',
-            'speed': $('input').eq(0).val()
-        };
-        postAPI('/other', data);
+           var data = {
+               'command': 'HOME',
+               'speed': $('input').eq(0).val()
+           };
+           postAPI('/other', data);
     });
 
-
+    $('.visca-submit-command').on('click', function () {
+           $('.command').append("hello");
+    });
 });
 
 function postAPI(endpoint, data) {
     $.ajax({
         type: 'POST',
-        url: '/api' + endpoint,
+        url: '/controller' + endpoint,
         data: data,
         success: function(msg){
             $('.response').val(msg);

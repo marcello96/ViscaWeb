@@ -13,7 +13,7 @@ import pl.edu.agh.visca.service.ViscaCommandHelper;
 import pl.edu.agh.visca.service.exception.TimeoutException;
 
 @RestController
-@RequestMapping("/api/zoom")
+@RequestMapping("/controller/zoom")
 @AllArgsConstructor
 public class ZoomController {
     private final Logger logger = LoggerFactory.getLogger(ZoomController.class);
