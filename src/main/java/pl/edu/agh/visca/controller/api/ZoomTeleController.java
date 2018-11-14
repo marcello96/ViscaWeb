@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.visca.cmd.ZoomTeleStdCmd;
 import pl.edu.agh.visca.model.CommandName;
-import pl.edu.agh.visca.service.ViscaCommandHelper;
+import pl.edu.agh.visca.service.ViscaService;
 
 @RestController
 @RequestMapping("/controller/zoom-tele")
@@ -19,7 +19,7 @@ import pl.edu.agh.visca.service.ViscaCommandHelper;
 public class ZoomTeleController {
     private final Logger logger = LoggerFactory.getLogger(ZoomTeleController.class);
 
-    private final ViscaCommandHelper viscaCommandHelper;
+    private final ViscaService viscaService;
 
     @RequestMapping(method = RequestMethod.POST)
     private ResponseEntity changeZoomTele(@RequestParam String command, @RequestParam ZoomTeleStdCmd.CONSTANT_SPEED speed) {
@@ -27,8 +27,7 @@ public class ZoomTeleController {
         val commandName = CommandName.valueOf(command);
         val realCommand = (ZoomTeleStdCmd) commandName.getCommand();
         realCommand.setSpeed(speed);
-        viscaCommandHelper.sendCommand(realCommand);
-        String response = viscaCommandHelper.readResponse();
+        String response = viscaService.runCommand(realCommand);
 
         logger.debug("Response: " + response);
         return ResponseEntity.ok(response);

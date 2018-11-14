@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.visca.cmd.*;
 import pl.edu.agh.visca.model.CommandName;
-import pl.edu.agh.visca.service.ViscaCommandHelper;
+import pl.edu.agh.visca.service.ViscaService;
 
 @RestController
 @RequestMapping("/controller/position")
@@ -19,34 +19,34 @@ import pl.edu.agh.visca.service.ViscaCommandHelper;
 public class PositionController {
     private static final Logger logger = LoggerFactory.getLogger(PositionController.class);
 
-    private final ViscaCommandHelper viscaCommandHelper;
+    private final ViscaService viscaService;
 
     @RequestMapping(method = RequestMethod.POST)
     private ResponseEntity changePosition(@RequestParam String command, @RequestParam ConstantPanSpeed panSpeed, @RequestParam ConstantTiltSpeed tiltSpeed) {
 
         val commandName = CommandName.valueOf(command);
+        String response = "";
         switch (commandName) {
             case PAN_TILT_UP:
                 val commandUp = (PanTiltUpCmd) commandName.getCommand();
                 commandUp.setSpeed(panSpeed, tiltSpeed);
-                viscaCommandHelper.sendCommand(commandUp);
+                response = viscaService.runCommand(commandUp);
                 break;
             case PAN_TILT_DOWN:
-                val commandDown = (PanTiltUpCmd) commandName.getCommand();
+                val commandDown = (PanTiltDownCmd) commandName.getCommand();
                 commandDown.setSpeed(panSpeed, tiltSpeed);
-                viscaCommandHelper.sendCommand(commandDown);
+                response = viscaService.runCommand(commandDown);
                 break;
             case PAN_TILT_LEFT:
                 val commandLeft = (PanTiltLeftCmd) commandName.getCommand();
                 commandLeft.setSpeed(panSpeed, tiltSpeed);
-                viscaCommandHelper.sendCommand(commandLeft);
+                response = viscaService.runCommand(commandLeft);
                 break;
             case PAN_TILT_RIGHT:
                 val commandRight = (PanTiltRightCmd) commandName.getCommand();
                 commandRight.setSpeed(panSpeed, tiltSpeed);
-                viscaCommandHelper.sendCommand(commandRight);
+                response = viscaService.runCommand(commandRight);
         }
-        String response = viscaCommandHelper.readResponse();
 
         logger.debug("Response: " + response);
         return ResponseEntity.ok(response);

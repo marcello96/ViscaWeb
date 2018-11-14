@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.visca.cmd.ZoomWideStdCmd;
 import pl.edu.agh.visca.model.CommandName;
-import pl.edu.agh.visca.service.ViscaCommandHelper;
+import pl.edu.agh.visca.service.ViscaService;
 
 @RestController
 @RequestMapping("/controller/zoom-wide")
@@ -19,7 +19,7 @@ import pl.edu.agh.visca.service.ViscaCommandHelper;
 public class ZoomWideController {
     private final Logger logger = LoggerFactory.getLogger(ZoomWideController.class);
 
-    private final ViscaCommandHelper viscaCommandHelper;
+    private final ViscaService viscaService;
 
     @RequestMapping(method = RequestMethod.POST)
     private ResponseEntity changeZoomWide(@RequestParam String command, @RequestParam ZoomWideStdCmd.CONSTANT_SPEED speed) {
@@ -27,8 +27,7 @@ public class ZoomWideController {
         val commandName = CommandName.valueOf(command);
         val realCommand = (ZoomWideStdCmd) commandName.getCommand();
         realCommand.setSpeed(speed);
-        viscaCommandHelper.sendCommand(commandName.getCommand());
-        String response = viscaCommandHelper.readResponse();
+        String response = viscaService.runCommand(realCommand);
 
         logger.debug("Response: " + response);
         return ResponseEntity.ok(response);

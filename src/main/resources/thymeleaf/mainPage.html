@@ -36,7 +36,7 @@
                 <div class="from-group">
                     <select class="form-control" id="pan-speed">
                         <option th:each="pan : ${T(pl.edu.agh.visca.cmd.ConstantPanSpeed).values()}" th:value="${pan}"
-                                th:text="${pan.name}"></option>
+                                th:text="${pan.value}"></option>
                     </select>
 
                 </div>
@@ -46,7 +46,7 @@
                 <div class="from-group">
                     <select class="form-control" id="tilt-speed">
                         <option th:each="tilt : ${T(pl.edu.agh.visca.cmd.ConstantTiltSpeed).values()}" th:value="${tilt}"
-                                th:text="${tilt.name}"></option>
+                                th:text="${tilt.value}"></option>
                     </select>
 
                 </div>
@@ -76,7 +76,7 @@
                 <div class="from-group">
                     <select class="form-control" id="zoom-tele-speed">
                         <option th:each="speed : ${T(pl.edu.agh.visca.cmd.ZoomTeleStdCmd.CONSTANT_SPEED).values()}"
-                                th:value="${speed}" th:text="${speed.name}"></option>
+                                th:value="${speed}" th:text="${speed.value}"></option>
                     </select>
 
                 </div>
@@ -86,7 +86,7 @@
                 <div class="from-group">
                     <select class="form-control" id="zoom-wide-speed">
                         <option th:each="speed : ${T(pl.edu.agh.visca.cmd.ZoomWideStdCmd.CONSTANT_SPEED).values()}"
-                                th:value="${speed}" th:text="${speed.name}"></option>
+                                th:value="${speed}" th:text="${speed.value}"></option>
                     </select>
 
                 </div>
