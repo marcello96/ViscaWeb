@@ -2,47 +2,51 @@ $(function () {
 
     $('.visca-position-up').on('click', function () {
         var data = {
-            'direction': 'UP',
-            'speed': $('input').eq(0).val()
+            'command': 'PAN_TILT_UP',
+            'panSpeed': $('#pan-speed').eq(0).val(),
+            'tiltSpeed': $('#tilt-speed').eq(0).val()
         };
        postAPI('/position', data);
     });
 
     $('.visca-position-down').on('click', function () {
         var data = {
-            'direction': 'DOWN',
-            'speed': $('input').eq(0).val()
+            'command': 'PAN_TILT_DOWN',
+            'panSpeed': $('#pan-speed').eq(0).val(),
+            'tiltSpeed': $('#tilt-speed').eq(0).val()
         };
         postAPI('/position', data);
     });
     $('.visca-position-left').on('click', function () {
         var data = {
-            'direction': 'LEFT',
-            'speed': $('input').eq(0).val()
+            'command': 'PAN_TILT_LEFT',
+            'panSpeed': $('#pan-speed').eq(0).val(),
+            'tiltSpeed': $('#tilt-speed').eq(0).val()
         };
         postAPI('/position', data);
     });
     $('.visca-position-right').on('click', function () {
         var data = {
-            'direction': 'RIGHT',
-            'speed': $('input').eq(0).val()
+            'command': 'PAN_TILT_RIGHT',
+            'panSpeed': $('#pan-speed').eq(0).val(),
+            'tiltSpeed': $('#tilt-speed').eq(0).val()
         };
         postAPI('/position', data);
     });
-    // ----------------------------------- Zoom
+
     $('.visca-zoom-tele').on('click', function () {
         var data = {
-            'zoom': 'TELE',
-            'speed': $('input').eq(0).val()
+            'command': 'ZOOM_TELE',
+            'speed': $('#zoom-tele-speed').eq(0).val()
         };
-        postAPI('/zoom', data);
+        postAPI('/zoom-tele', data);
     });
     $('.visca-zoom-wide').on('click', function () {
         var data = {
-            'zoom': 'WIDE',
-            'speed': $('input').eq(0).val()
+            'command': 'ZOOM_WIDE',
+            'speed': $('#zoom-wide-speed').eq(0).val()
         };
-        postAPI('/zoom', data);
+        postAPI('/zoom-wide', data);
     });
 
     $('.visca-other-home').on('click', function () {
@@ -52,13 +56,10 @@ $(function () {
            };
            postAPI('/other', data);
     });
-
-    $('.visca-submit-command').on('click', function () {
-           $('.command').append("hello");
-    });
 });
 
 function postAPI(endpoint, data) {
+    $('.command').append(data['command']).append(' ');
     $.ajax({
         type: 'POST',
         url: '/controller' + endpoint,

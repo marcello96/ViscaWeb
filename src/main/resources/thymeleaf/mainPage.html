@@ -34,9 +34,9 @@
             <h3>Speed pan</h3>
             <form>
                 <div class="from-group">
-                    <select class="form-control">
+                    <select class="form-control" id="pan-speed">
                         <option th:each="pan : ${T(pl.edu.agh.visca.cmd.ConstantPanSpeed).values()}" th:value="${pan}"
-                                th:text="${pan.value}"></option>
+                                th:text="${pan.name}"></option>
                     </select>
 
                 </div>
@@ -44,9 +44,9 @@
             <h3>Speed tilt</h3>
             <form>
                 <div class="from-group">
-                    <select class="form-control">
-                        <option th:each="tilt : ${T(pl.edu.agh.visca.cmd.ConstantTiltSpeed).values()}"
-                                th:value="${tilt}" th:text="${tilt.value}"></option>
+                    <select class="form-control" id="tilt-speed">
+                        <option th:each="tilt : ${T(pl.edu.agh.visca.cmd.ConstantTiltSpeed).values()}" th:value="${tilt}"
+                                th:text="${tilt.name}"></option>
                     </select>
 
                 </div>
@@ -74,9 +74,9 @@
             <h3>Speed zoom tele</h3>
             <form>
                 <div class="from-group">
-                    <select class="form-control">
+                    <select class="form-control" id="zoom-tele-speed">
                         <option th:each="speed : ${T(pl.edu.agh.visca.cmd.ZoomTeleStdCmd.CONSTANT_SPEED).values()}"
-                                th:value="${speed}" th:text="${speed.value}"></option>
+                                th:value="${speed}" th:text="${speed.name}"></option>
                     </select>
 
                 </div>
@@ -84,9 +84,9 @@
             <h3>Speed zoom wide</h3>
             <form>
                 <div class="from-group">
-                    <select class="form-control">
+                    <select class="form-control" id="zoom-wide-speed">
                         <option th:each="speed : ${T(pl.edu.agh.visca.cmd.ZoomWideStdCmd.CONSTANT_SPEED).values()}"
-                                th:value="${speed}" th:text="${speed.value}"></option>
+                                th:value="${speed}" th:text="${speed.name}"></option>
                     </select>
 
                 </div>

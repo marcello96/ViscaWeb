@@ -33,4 +33,8 @@ public enum ConstantPanSpeed {
     LEVEL18((byte) 0x18);
 
     private byte value;
+
+    public String getName() {
+        return name();
+    }
 }

@@ -2,6 +2,7 @@ package pl.edu.agh.visca.service;
 
 import jssc.SerialPort;
 import jssc.SerialPortException;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 import static pl.edu.agh.visca.service.SleepUtility.sleep;
 
 @Service
+@Getter
 public class ViscaService {
     private static final int TIME_SLEEPING = 2;
 
@@ -34,7 +36,7 @@ public class ViscaService {
                         @Value("${serial.stopbits}") int serialStopBits,
                         @Value("${serial.parity}") int serialParity,
                         ViscaResponseReader viscaResponseReader,
-                        ViscaCommandHelper viscaCommandHelper) throws SerialPortException {
+                        ViscaCommandHelper viscaCommandHelper) {
 
         this.serialPortName = serialPortName;
         this.serialBaudrate = serialBaudrate;

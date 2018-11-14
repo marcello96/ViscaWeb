@@ -1,6 +1,5 @@
 package pl.edu.agh.visca.service;
 
-import jssc.SerialPort;
 import jssc.SerialPortException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,10 @@ import static pl.edu.agh.visca.service.SleepUtility.sleep;
 @Service
 @AllArgsConstructor
 public class ViscaCommandHelper {
-    private ViscaResponseReader viscaResponseReader;
+    private final ViscaResponseReader viscaResponseReader;
+    private final ViscaService viscaService;
 
-    public void sendCommand(SerialPort serialPort, Cmd command) {
+    public void sendCommand(Cmd command) {
         if (command instanceof WaitCmd) {
             sleep(((WaitCmd) command).getTime());
             return;
@@ -31,21 +31,21 @@ public class ViscaCommandHelper {
             vCmd.commandData = cmdData;
             vCmd.sourceAdr = 0;
             vCmd.destinationAdr = command.getDestination();
-            cmdData = vCmd.getCommandData();
+            cmdData = vCmd.getViscaCommandData();
             System.out.println("@ " + byteArrayToString(cmdData));
 
-            serialPort.writeBytes(cmdData);
+            viscaService.getSerialPort().writeBytes(cmdData);
         } catch (SerialPortException | RuntimeException e) {
             e.printStackTrace();
         }
     }
 
-    public void readResponse(SerialPort serialPort) {
+    public String readResponse() {
         try {
-            byte[] response = viscaResponseReader.readResponse(serialPort);
-            System.out.println("> " + byteArrayToString(response));
+            byte[] response = viscaResponseReader.readResponse(viscaService.getSerialPort());
+            return byteArrayToString(response);
         } catch (TimeoutException | SerialPortException e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 

@@ -40,5 +40,9 @@ public final class ZoomTeleStdCmd extends Cmd {
         SPEED7((byte) 0x27);
 
         private byte value;
+
+        public String getName() {
+            return name();
+        }
     }
 }

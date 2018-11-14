@@ -29,4 +29,8 @@ public enum ConstantTiltSpeed {
     LEVEL14((byte) 0x14);
 
     private byte value;
+
+    public String getName() {
+        return name();
+    }
 }

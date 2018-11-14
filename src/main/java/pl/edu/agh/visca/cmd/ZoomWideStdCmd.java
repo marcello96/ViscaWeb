@@ -41,5 +41,9 @@ public final class ZoomWideStdCmd extends Cmd {
         SPEED7((byte) 0x37);
 
         private byte value;
+
+        public String getName() {
+            return name();
+        }
     }
 }
