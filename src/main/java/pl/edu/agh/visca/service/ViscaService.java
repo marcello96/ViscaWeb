@@ -1,13 +1,17 @@
 package pl.edu.agh.visca.service;
 
+import com.google.common.base.Preconditions;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.visca.cmd.*;
-import pl.edu.agh.visca.service.exception.TimeoutException;
+import pl.edu.agh.visca.cmd.ViscaCommand;
+import pl.edu.agh.visca.cmd.WaitCmd;
+import pl.edu.agh.visca.model.CommandName;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +40,7 @@ public class ViscaService {
                         @Value("${serial.stopbits}") int serialStopBits,
                         @Value("${serial.parity}") int serialParity,
                         ViscaResponseReader viscaResponseReader
-                        ) {
+    ) {
 
         this.serialPortName = serialPortName;
         this.serialBaudrate = serialBaudrate;
@@ -52,12 +56,26 @@ public class ViscaService {
         //configDevice();
     }
 
-    public void runCommandList(List<Cmd> commandList) {
-        commandList.forEach(this::runCommand);
+    @SneakyThrows
+    public String runCommandList(List<CommandName> commandList) {
+        return commandList.stream()
+                .map(this::runCommand)
+                .collect(Collectors.joining("\n"));
     }
 
-    public String runCommand(Cmd command) {
-        sendCommand(command);
+    @SneakyThrows
+    public String runCommand(CommandName commandName) {
+        switch (commandName) {
+            case PAN_TILT_HOME:
+                sendHomeCommand();
+                break;
+            case WAIT:
+                sendWaitCommand();
+                break;
+            default:
+                sendCommand(commandName);
+        }
+
         return readResponse();
     }
 
@@ -67,43 +85,45 @@ public class ViscaService {
     }
 
     private void configDevice() {
-        sendCommand(new AddressCmd());
+        sendCommand(CommandName.ADDRESS);
         readResponse();
         sleep(TIME_SLEEPING);
 
-        sendCommand( new PanTiltHomeCmd());
-        readResponse();
+        sendHomeCommand();
+    }
+
+    @SneakyThrows
+    private void sendCommand(CommandName commandName) {
+        Preconditions.checkArgument(commandName != CommandName.WAIT);
+        Preconditions.checkArgument(commandName != CommandName.PAN_TILT_HOME);
+
+        val command = commandName.getCommand();
+        byte[] cmdData = command.createCommandData();
+        ViscaCommand vCmd = new ViscaCommand();
+        vCmd.commandData = cmdData;
+        vCmd.sourceAdr = 0;
+        vCmd.destinationAdr = command.getDestination();
+        cmdData = vCmd.getViscaCommandData();
+        System.out.println("@ " + byteArrayToString(cmdData));
+
+        serialPort.writeBytes(cmdData);
+    }
+
+    @SneakyThrows
+    private void sendHomeCommand() {
+        sendCommand(CommandName.PAN_TILT_HOME);
         sleep(TIME_SLEEPING);
     }
 
-    private void sendCommand(Cmd command) {
-        if (command instanceof WaitCmd) {
-            sleep(((WaitCmd) command).getTime());
-            return;
-        }
-
-        try {
-            byte[] cmdData = command.createCommandData();
-            ViscaCommand vCmd = new ViscaCommand();
-            vCmd.commandData = cmdData;
-            vCmd.sourceAdr = 0;
-            vCmd.destinationAdr = command.getDestination();
-            cmdData = vCmd.getViscaCommandData();
-            System.out.println("@ " + byteArrayToString(cmdData));
-
-            serialPort.writeBytes(cmdData);
-        } catch (SerialPortException | RuntimeException e) {
-            e.printStackTrace();
-        }
+    @SneakyThrows
+    private void sendWaitCommand() {
+        sleep(((WaitCmd) CommandName.WAIT.getCommand()).getTime());
     }
 
+    @SneakyThrows
     private String readResponse() {
-        try {
-            byte[] response = viscaResponseReader.readResponse(serialPort);
-            return byteArrayToString(response);
-        } catch (TimeoutException | SerialPortException e) {
-            return e.getMessage();
-        }
+        byte[] response = viscaResponseReader.readResponse(serialPort);
+        return byteArrayToString(response);
     }
 
     private String byteArrayToString(byte[] bytes) {

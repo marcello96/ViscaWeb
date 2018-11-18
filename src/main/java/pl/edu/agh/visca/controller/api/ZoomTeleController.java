@@ -13,6 +13,8 @@ import pl.edu.agh.visca.cmd.ZoomTeleStdCmd;
 import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.service.ViscaService;
 
+import static pl.edu.agh.visca.model.CommandName.ZOOM_TELE;
+
 @RestController
 @RequestMapping("/controller/zoom-tele")
 @AllArgsConstructor
@@ -24,10 +26,15 @@ public class ZoomTeleController {
     @RequestMapping(method = RequestMethod.POST)
     private ResponseEntity changeZoomTele(@RequestParam String command, @RequestParam ZoomTeleStdCmd.CONSTANT_SPEED speed) {
 
-        val commandName = CommandName.valueOf(command);
-        val realCommand = (ZoomTeleStdCmd) commandName.getCommand();
-        realCommand.setSpeed(speed);
-        String response = viscaService.runCommand(realCommand);
+        String response;
+        try {
+            val commandName = CommandName.valueOf(command);
+            val realCommand = (ZoomTeleStdCmd) commandName.getCommand();
+            realCommand.setSpeed(speed);
+            response = viscaService.runCommand(ZOOM_TELE);
+        } catch (Exception e) {
+            response = e.getMessage();
+        }
 
         logger.debug("Response: " + response);
         return ResponseEntity.ok(response);

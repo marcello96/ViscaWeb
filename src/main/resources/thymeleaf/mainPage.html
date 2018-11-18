@@ -115,6 +115,22 @@
 
     <br>
     <div class="row">
+        <div class="col-lg-5">
+            <h3>Time waiting</h3>
+            <select class="form-control" id="time-waiting">
+                <option th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i}">
+                </option>
+            </select>
+        </div>
+
+        <section class="col-lg-5">
+            <h3>Wait</h3>
+            <button type="button" class="btn btn-warning visca-other-wait">Wait</button>
+        </section>
+    </div>
+
+    <br>
+    <div class="row">
         <h3 class="col-lg-5">Response from visca</h3>
         <section class="col-lg-5">
             <textarea class="response" rows="2" cols="50"></textarea>
@@ -123,12 +139,21 @@
 
     <br>
     <div class="row">
-        <h3 class="col-lg-3">Macro command</h3>
-        <section class="col-lg-5">
-            <textarea class="command" rows="2" cols="50"></textarea>
+        <h3>Macro define</h3>
+        <section class="col-lg-2">
+            <textarea class="commandName"></textarea>
         </section>
-        <button class="btn btn-primary col-lg-3 col-md-3 offset-md-3 visca-submit-command">Submit</button>
+        <section class="col-lg-4">
+            <textarea class="commandContent" rows="2" cols="50"></textarea>
+        </section>
+        <button class="btn btn-primary col-lg-2 col-md-2 offset-md-2 visca-submit-command">Submit</button>
     </div>
+
+    <tr th:each="macro : ${listMacro}">
+        <td><span th:text="${macro.name}"></span></td>
+        <td><span th:text="${macro.getContentAsString()}"></span></td>
+        <br>
+    </tr>
 </div>
 
 </body>

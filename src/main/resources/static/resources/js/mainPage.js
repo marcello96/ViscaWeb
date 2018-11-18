@@ -1,65 +1,110 @@
 $(function () {
 
     $('.visca-position-up').on('click', function () {
+        var command = 'PAN_TILT_UP';
+        var panSpeed = $('#pan-speed').eq(0).val();
+        var tiltSpeed = $('#tilt-speed').eq(0).val();
+        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
         var data = {
-            'command': 'PAN_TILT_UP',
-            'panSpeed': $('#pan-speed').eq(0).val(),
-            'tiltSpeed': $('#tilt-speed').eq(0).val()
+            'command': command,
+            'panSpeed': panSpeed,
+            'tiltSpeed': tiltSpeed
         };
        postAPI('/position', data);
     });
 
     $('.visca-position-down').on('click', function () {
+        var command = 'PAN_TILT_DOWN';
+        var panSpeed = $('#pan-speed').eq(0).val();
+        var tiltSpeed = $('#tilt-speed').eq(0).val();
+        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
         var data = {
-            'command': 'PAN_TILT_DOWN',
-            'panSpeed': $('#pan-speed').eq(0).val(),
-            'tiltSpeed': $('#tilt-speed').eq(0).val()
+            'command': command,
+            'panSpeed': panSpeed,
+            'tiltSpeed': tiltSpeed
         };
         postAPI('/position', data);
     });
+
     $('.visca-position-left').on('click', function () {
+        var command = 'PAN_TILT_LEFT';
+        var panSpeed = $('#pan-speed').eq(0).val();
+        var tiltSpeed = $('#tilt-speed').eq(0).val();
+        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
         var data = {
-            'command': 'PAN_TILT_LEFT',
-            'panSpeed': $('#pan-speed').eq(0).val(),
-            'tiltSpeed': $('#tilt-speed').eq(0).val()
+            'command': command,
+            'panSpeed': panSpeed,
+            'tiltSpeed': tiltSpeed
         };
         postAPI('/position', data);
     });
+
     $('.visca-position-right').on('click', function () {
+        var command = 'PAN_TILT_RIGHT';
+        var panSpeed = $('#pan-speed').eq(0).val();
+        var tiltSpeed = $('#tilt-speed').eq(0).val();
+        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
         var data = {
-            'command': 'PAN_TILT_RIGHT',
-            'panSpeed': $('#pan-speed').eq(0).val(),
-            'tiltSpeed': $('#tilt-speed').eq(0).val()
+            'command': command,
+            'panSpeed': panSpeed,
+            'tiltSpeed': tiltSpeed
         };
         postAPI('/position', data);
     });
 
     $('.visca-zoom-tele').on('click', function () {
+        var command = 'ZOOM_TELE';
+        var speed = $('#zoom-tele-speed').eq(0).val();
+        $(".commandContent").append(command).append("_").append(speed).append(' ');
         var data = {
-            'command': 'ZOOM_TELE',
-            'speed': $('#zoom-tele-speed').eq(0).val()
+            'command': command,
+            'speed': speed
         };
         postAPI('/zoom-tele', data);
     });
+
     $('.visca-zoom-wide').on('click', function () {
+        var command = 'ZOOM_WIDE';
+        var speed = $('#zoom-wide-speed').eq(0).val();
+        $(".commandContent").append(command).append("_").append(speed).append(' ');
         var data = {
-            'command': 'ZOOM_WIDE',
-            'speed': $('#zoom-wide-speed').eq(0).val()
+            'command': command,
+            'speed': speed
         };
         postAPI('/zoom-wide', data);
     });
 
     $('.visca-other-home').on('click', function () {
-           var data = {
-               'command': 'HOME',
-               'speed': $('input').eq(0).val()
-           };
-           postAPI('/other', data);
+        var command = 'PAN_TILT_HOME';
+        $(".commandContent").append(command).append(' ');
+        var data = {
+           'command': command
+        };
+        postAPI('/home', data);
+    });
+
+     $('.visca-other-wait').on('click', function () {
+        var command = 'WAIT';
+        var time = $('#time-waiting').eq(0).val();
+        $(".commandContent").append(command).append('_').append(time).append(' ');
+        var data = {
+               'command': command,
+               'time': time
+        };
+        postAPI('/wait', data);
+     });
+
+    $('.visca-submit-command').on('click', function () {
+        var data = {
+            'macroName' : $('.commandName').eq(0).val(),
+            'macroContent': $('.commandContent').eq(0).val()
+        };
+        postAPI('/macro/add', data);
     });
 });
 
 function postAPI(endpoint, data) {
-    $('.command').append(data['command']).append(' ');
+    $('.response').val('');
     $.ajax({
         type: 'POST',
         url: '/controller' + endpoint,
@@ -69,4 +114,3 @@ function postAPI(endpoint, data) {
         }
     });
 }
-

@@ -6,7 +6,7 @@
 package pl.edu.agh.visca.service;
 
 import jssc.SerialPort;
-import jssc.SerialPortException;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.service.exception.TimeoutException;
 
@@ -18,7 +18,8 @@ import java.util.List;
 public class ViscaResponseReader {
     private static final long TIMEOUT_MS = 5000L;
 
-    public byte[] readResponse(SerialPort serialPort) throws SerialPortException, TimeoutException {
+    @SneakyThrows
+    public byte[] readResponse(SerialPort serialPort) {
         List<Byte> data = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 

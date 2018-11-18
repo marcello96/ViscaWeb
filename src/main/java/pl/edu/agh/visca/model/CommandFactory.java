@@ -1,5 +1,6 @@
 package pl.edu.agh.visca.model;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.*;
 
@@ -10,13 +11,15 @@ import java.util.stream.Stream;
 @Service
 public class CommandFactory {
 
-    public List<Cmd> createCommandList(String[] inputCommands) {
+    @SneakyThrows
+    public List<CommandName> createCommandList(String[] inputCommands) {
         return Stream.of(inputCommands)
                 .map(this::createCommand)
                 .collect(Collectors.toList());
     }
 
-    private Cmd createCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName createCommand(String inputCommand) {
         if (inputCommand.startsWith(CommandName.WAIT.name())) {
             return getWaitCommand(inputCommand);
         }
@@ -45,66 +48,53 @@ public class CommandFactory {
             return getPanTiltRightCommand(inputCommand);
         }
 
-        return CommandName.valueOf(inputCommand).getCommand();
+        return CommandName.valueOf(inputCommand);
     }
 
-    private Cmd getWaitCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getWaitCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
         String time = inputCommand.substring(pos + 1);
         WaitCmd cmd = (WaitCmd) CommandName.WAIT.getCommand();
+        cmd.setTime(Integer.parseInt(time));
 
-        try {
-            cmd.setTime(Integer.parseInt(time));
-        } catch (NumberFormatException e) {
-            System.out.println("Wrong format: should be an integer" + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return cmd;
+        return CommandName.WAIT;
     }
 
-    private Cmd getZoomTeleCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getZoomTeleCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ZoomTeleStdCmd cmd = (ZoomTeleStdCmd) CommandName.ZOOM_TELE.getCommand();
 
         if (pos == -1) {
-            return cmd;
+            return CommandName.ZOOM_TELE;
         }
 
         String speed = inputCommand.substring(pos + 1);
-        try {
-            cmd.setSpeed(ZoomTeleStdCmd.CONSTANT_SPEED.valueOf(speed));
-        } catch (IllegalArgumentException e) {
-            System.out.println("Wrong format should be a constant in ZoomTeleStdCmd.Constant_Speed" + e.getMessage());
-            e.printStackTrace();
-        }
+        cmd.setSpeed(ZoomTeleStdCmd.CONSTANT_SPEED.valueOf(speed));
 
-        return cmd;
+        return CommandName.ZOOM_TELE;
     }
 
-    private Cmd getZoomWideCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getZoomWideCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ZoomWideStdCmd cmd = (ZoomWideStdCmd) CommandName.ZOOM_WIDE.getCommand();
 
         if (pos == -1) {
-            return cmd;
+            return CommandName.ZOOM_WIDE;
         }
 
         String speed = inputCommand.substring(pos + 1);
+        cmd.setSpeed(ZoomWideStdCmd.CONSTANT_SPEED.valueOf(speed));
 
-        try {
-            cmd.setSpeed(ZoomWideStdCmd.CONSTANT_SPEED.valueOf(speed));
-        } catch (IllegalArgumentException e) {
-            System.out.println("Wrong format should be a constant in ZoomWideStdCmd.Constant_Speed" + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return cmd;
+        return CommandName.ZOOM_WIDE;
     }
 
-    private Cmd getPanTiltUpCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getPanTiltUpCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -116,22 +106,19 @@ public class CommandFactory {
 
         PanTiltUpCmd cmd = (PanTiltUpCmd) CommandName.PAN_TILT_UP.getCommand();
         if (pos == -1 || pos2 == -1) {
-            return cmd;
+            return CommandName.PAN_TILT_UP;
         }
 
         String panSpeed = inputCommand.substring(pos + 1, pos2);
         String tiltSpeed = inputCommand.substring(pos2 + 1);
 
-        try {
-            cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
-        } catch (IllegalArgumentException e) {
-            throw handlePanTiltException(e);
-        }
+        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        return cmd;
+        return CommandName.PAN_TILT_UP;
     }
 
-    private Cmd getPanTiltDownCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getPanTiltDownCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -144,22 +131,18 @@ public class CommandFactory {
         PanTiltDownCmd cmd = (PanTiltDownCmd) CommandName.PAN_TILT_DOWN.getCommand();
 
         if (pos == -1 || pos2 == -1) {
-            return cmd;
+            return CommandName.PAN_TILT_DOWN;
         }
 
         String panSpeed = inputCommand.substring(pos + 1, pos2);
         String tiltSpeed = inputCommand.substring(pos2 + 1);
+        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        try {
-            cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
-        } catch (IllegalArgumentException e) {
-            throw handlePanTiltException(e);
-        }
-
-        return cmd;
+        return CommandName.PAN_TILT_DOWN;
     }
 
-    private Cmd getPanTiltLeftCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getPanTiltLeftCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -172,22 +155,18 @@ public class CommandFactory {
         PanTiltLeftCmd cmd = (PanTiltLeftCmd) CommandName.PAN_TILT_LEFT.getCommand();
 
         if (pos == -1 || pos2 == -1) {
-            return cmd;
+            return CommandName.PAN_TILT_LEFT;
         }
 
         String panSpeed = inputCommand.substring(pos + 1, pos2);
         String tiltSpeed = inputCommand.substring(pos2 + 1);
+        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        try {
-            cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
-        } catch (IllegalArgumentException e) {
-            throw handlePanTiltException(e);
-        }
-
-        return cmd;
+        return CommandName.PAN_TILT_LEFT;
     }
 
-    private Cmd getPanTiltRightCommand(String inputCommand) {
+    @SneakyThrows
+    private CommandName getPanTiltRightCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_",
                 inputCommand.indexOf("_",
                         inputCommand.indexOf("_") + 1) + 1);
@@ -200,22 +179,13 @@ public class CommandFactory {
         PanTiltRightCmd cmd = (PanTiltRightCmd) CommandName.PAN_TILT_RIGHT.getCommand();
 
         if (pos == -1 || pos2 == -1) {
-            return cmd;
+            return CommandName.PAN_TILT_RIGHT;
         }
 
         String panSpeed = inputCommand.substring(pos + 1, pos2);
         String tiltSpeed = inputCommand.substring(pos2 + 1);
+        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        try {
-            cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
-        } catch (IllegalArgumentException e) {
-            throw handlePanTiltException(e);
-        }
-
-        return cmd;
-    }
-
-    private IllegalArgumentException handlePanTiltException(Exception e) {
-        return new IllegalArgumentException("Wrong format should be a constant in ConstantPanSpeed and in ConstantTiltSpeed: ", e);
+        return CommandName.PAN_TILT_RIGHT;
     }
 }
