@@ -19,6 +19,7 @@
         .row {
             margin-top: 15px;
         }
+
     </style>
 </head>
 <body>
@@ -45,7 +46,8 @@
             <form>
                 <div class="from-group">
                     <select class="form-control" id="tilt-speed">
-                        <option th:each="tilt : ${T(pl.edu.agh.visca.cmd.ConstantTiltSpeed).values()}" th:value="${tilt}"
+                        <option th:each="tilt : ${T(pl.edu.agh.visca.cmd.ConstantTiltSpeed).values()}"
+                                th:value="${tilt}"
                                 th:text="${tilt.value}"></option>
                     </select>
 
@@ -149,11 +151,28 @@
         <button class="btn btn-primary col-lg-2 col-md-2 offset-md-2 visca-submit-command">Submit</button>
     </div>
 
-    <tr th:each="macro : ${listMacro}">
-        <td><span th:text="${macro.name}"></span></td>
-        <td><span th:text="${macro.getContentAsString()}"></span></td>
-        <br>
-    </tr>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>Macro's name</td>
+            <td>Macro's content</td>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="macro : ${listMacro}">
+            <tr>
+                <td><span th:text="${macro.name}"></span></td>
+                <td><span th:text="${macro.getContentAsString()}"></span></td>
+                <td>
+                    <button th:id="'button_' + ${macro.name}" type="submit" name="action" value="${macro.name}">Run
+                        macro
+                    </button>
+                </td>
+
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
 </div>
 
 </body>

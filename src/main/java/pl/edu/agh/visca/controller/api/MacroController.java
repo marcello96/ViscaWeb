@@ -16,7 +16,7 @@ import pl.edu.agh.visca.service.macro.Macro;
 import pl.edu.agh.visca.service.macro.ViscaMacroHolder;
 
 @RestController
-@RequestMapping("/controller/macro/add")
+@RequestMapping("/controller/macro")
 @AllArgsConstructor
 public class MacroController {
     private static final Logger logger = LoggerFactory.getLogger(MacroController.class);
@@ -24,8 +24,8 @@ public class MacroController {
     private final ViscaService viscaService;
     private final ViscaParserService viscaParserService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    private ResponseEntity changePosition(@RequestParam String macroName, @RequestParam String macroContent) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    private ResponseEntity addMacro(@RequestParam String macroName, @RequestParam String macroContent) {
         String response;
         try {
             if (StringUtils.isBlank(macroName) || StringUtils.isBlank(macroContent))
@@ -39,6 +39,22 @@ public class MacroController {
         }
 
         logger.debug("Response: " + response);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(value = "/run", method = RequestMethod.POST)
+    private ResponseEntity runMacro(@RequestParam String macroName) {
+        String response;
+        try {
+            val macro = ViscaMacroHolder.getMacro(macroName);
+            response = viscaService.runCommandList(macro.getContent());
+        } catch (Exception e) {
+            response = e.getMessage();
+        }
+
+        logger.debug("Response: " + response);
+
         return ResponseEntity.ok(response);
     }
 }

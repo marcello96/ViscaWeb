@@ -101,6 +101,15 @@ $(function () {
         };
         postAPI('/macro/add', data);
     });
+
+    $('[id^="button_"]').click(function(){
+         var id = $(this).attr("id").replace('button_', '');
+         var data = {
+            'macroName' : id
+         };
+         postAPI('/macro/run', data)
+    });
+
 });
 
 function postAPI(endpoint, data) {
