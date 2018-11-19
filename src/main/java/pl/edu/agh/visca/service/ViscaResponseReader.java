@@ -6,6 +6,7 @@
 package pl.edu.agh.visca.service;
 
 import jssc.SerialPort;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.service.exception.TimeoutException;
@@ -15,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ViscaResponseReader {
     private static final long TIMEOUT_MS = 5000L;
 
@@ -36,7 +38,6 @@ public class ViscaResponseReader {
                     for (Iterator var7 = data.iterator(); var7.hasNext(); responseData[idx++] = b) {
                         b = (Byte) var7.next();
                     }
-
                     return responseData;
                 }
             }

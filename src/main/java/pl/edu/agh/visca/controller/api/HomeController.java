@@ -1,6 +1,7 @@
 package pl.edu.agh.visca.controller.api;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,29 +11,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.visca.model.CommandName;
+import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaService;
 
 @RestController
 @RequestMapping("/controller/home")
 @AllArgsConstructor
+@Slf4j
 public class HomeController {
-    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     private final ViscaService viscaService;
 
     @RequestMapping(method = RequestMethod.POST)
-    private ResponseEntity changePosition(@RequestParam String command) {
+    public ResponseEntity changePosition(@RequestParam String command,
+                                         @RequestParam(defaultValue = "1") String address) {
         String response;
+        Constants.DESTINATION_ADDRESS = Byte.parseByte(address);
         try {
             val commandName = CommandName.valueOf(command);
-            if (commandName != CommandName.PAN_TILT_HOME)
+            if (commandName != CommandName.HOME)
                 throw new IllegalArgumentException("This is not home command");
-            response = viscaService.runCommand(CommandName.PAN_TILT_HOME);
+            response = viscaService.runCommand(CommandName.HOME);
         } catch (Exception e) {
             response = e.getMessage();
         }
 
-        logger.debug("Response: " + response);
+        log.debug("Response: " + response);
         return ResponseEntity.ok(response);
     }
 }

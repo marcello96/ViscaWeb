@@ -13,14 +13,13 @@ public class WaitCmd extends Cmd {
     private int time;
 
     public WaitCmd() {
-        super(Constants.DESTINATION_ADDRESS);
+        super(false, false);
         this.time = DEFAULT_TIME_WAITING;
     }
 
     @Override
-    public byte[] createCommandData() {
+    public byte[] prepareContent() {
         sleep(time);
         return new byte[0];
     }
-
 }

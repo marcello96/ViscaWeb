@@ -1,6 +1,7 @@
 package pl.edu.agh.visca.controller.api;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,33 +19,33 @@ import pl.edu.agh.visca.service.macro.ViscaMacroHolder;
 @RestController
 @RequestMapping("/controller/macro")
 @AllArgsConstructor
+@Slf4j
 public class MacroController {
-    private static final Logger logger = LoggerFactory.getLogger(MacroController.class);
 
     private final ViscaService viscaService;
     private final ViscaParserService viscaParserService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    private ResponseEntity addMacro(@RequestParam String macroName, @RequestParam String macroContent) {
-        String response;
+    public ResponseEntity addMacro(@RequestParam String macroName, @RequestParam String macroContent) {
+        String response =  "OK";
         try {
             if (StringUtils.isBlank(macroName) || StringUtils.isBlank(macroContent))
                 throw new IllegalArgumentException("Can not create macro for empty macroName or macroContent");
 
             val commandNames = viscaParserService.parseCommandInput(macroContent.trim());
             ViscaMacroHolder.addMacro(new Macro(macroName, commandNames));
-            response = viscaService.runCommandList(commandNames);
+            //response = viscaService.runCommandList(commandNames);
         } catch (Exception e) {
             response = e.getMessage();
         }
 
-        logger.debug("Response: " + response);
+        log.debug("Response: " + response);
 
         return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "/run", method = RequestMethod.POST)
-    private ResponseEntity runMacro(@RequestParam String macroName) {
+    public ResponseEntity runMacro(@RequestParam String macroName) {
         String response;
         try {
             val macro = ViscaMacroHolder.getMacro(macroName);
@@ -53,7 +54,7 @@ public class MacroController {
             response = e.getMessage();
         }
 
-        logger.debug("Response: " + response);
+        log.debug("Response: " + response);
 
         return ResponseEntity.ok(response);
     }

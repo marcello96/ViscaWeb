@@ -5,18 +5,15 @@
 
 package pl.edu.agh.visca.cmd;
 
-import pl.edu.agh.visca.model.Constants;
-
 public final class ClearAllCmd extends Cmd {
     private static final byte[] clearAllCommandData = new byte[]{1, 0, 1};
 
     public ClearAllCmd() {
-        super(Constants.SERVER_ADDRESS);
-
+        super(true, true);
     }
 
     @Override
-    public byte[] createCommandData() {
+    public byte[] prepareContent() {
         return duplicateArray(clearAllCommandData);
     }
 }

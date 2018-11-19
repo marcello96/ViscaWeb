@@ -11,19 +11,18 @@ public final class PanTiltLeftCmd extends Cmd {
     private static final byte[] ptLeftCommandData = new byte[]{1, 6, 1, 0x00, 0x00, 1, 3};
 
     public PanTiltLeftCmd() {
-        super(Constants.DESTINATION_ADDRESS);
-        setSpeed(ConstantPanSpeed.LEVEL08, ConstantTiltSpeed.LEVEL01);
+        super(false, true);
+        setSpeed(ConstantPanSpeed.L08);
     }
 
     @Override
-    public byte[] createCommandData() {
+    public byte[] prepareContent() {
         /*cmdData[3] = 8;
         cmdData[4] = 1;*/
         return duplicateArray(ptLeftCommandData);
     }
 
-    public void setSpeed(ConstantPanSpeed panSpeed, ConstantTiltSpeed tiltSpeed) {
+    public void setSpeed(ConstantPanSpeed panSpeed) {
         ptLeftCommandData[3] = panSpeed.getValue();
-        ptLeftCommandData[4] = tiltSpeed.getValue();
     }
 }

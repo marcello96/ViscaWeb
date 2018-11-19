@@ -11,11 +11,11 @@ public final class AddressCmd extends Cmd {
     private static final byte[] adrCommmandData = new byte[]{48, 1};
 
     public AddressCmd() {
-        super(Constants.SERVER_ADDRESS);
+        super(true, true);
     }
 
     @Override
-    public byte[] createCommandData() {
+    public byte[] prepareContent() {
         return duplicateArray(adrCommmandData);
     }
 }

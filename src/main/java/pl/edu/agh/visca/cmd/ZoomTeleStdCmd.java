@@ -13,7 +13,7 @@ public final class ZoomTeleStdCmd extends Cmd {
     private static final byte[] ptTeleStdCommandData = new byte[]{1, 4, 7, 0x00};
 
     public ZoomTeleStdCmd() {
-        super(Constants.DESTINATION_ADDRESS);
+        super(false, true);
         setSpeed(CONSTANT_SPEED.DEFAULT_SPEED);
     }
 
@@ -22,7 +22,7 @@ public final class ZoomTeleStdCmd extends Cmd {
     }
 
     @Override
-    public byte[] createCommandData() {
+    public byte[] prepareContent() {
         return duplicateArray(ptTeleStdCommandData);
     }
 

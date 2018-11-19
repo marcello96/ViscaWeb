@@ -5,56 +5,84 @@ import jssc.SerialPort;
 import jssc.SerialPortException;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.ViscaCommand;
 import pl.edu.agh.visca.cmd.WaitCmd;
 import pl.edu.agh.visca.model.CommandName;
+import pl.edu.agh.visca.model.Constants;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static pl.edu.agh.visca.service.SleepUtility.sleep;
 
 @Service
 @Getter
+@Slf4j
 public class ViscaService {
-    private static final int TIME_SLEEPING = 2;
+    private static final int TIME_SLEEPING = 3;
 
     private final String serialPortName;
     private final int serialBaudrate;
     private final int serialDatabits;
     private final int serialStopBits;
     private final int serialParity;
-    private ViscaResponseReader viscaResponseReader;
 
     private SerialPort serialPort;
 
-    @Autowired
+    private ViscaResponseReader viscaResponseReader;
+    private final ViscaResponseTranslator viscaResponseTranslator;
+
+
+    @SneakyThrows
     public ViscaService(@Value("${serial.port}") String serialPortName,
                         @Value("${serial.baudrate}") int serialBaudrate,
                         @Value("${serial.databits}") int serialDatabits,
                         @Value("${serial.stopbits}") int serialStopBits,
                         @Value("${serial.parity}") int serialParity,
-                        ViscaResponseReader viscaResponseReader
+                        ViscaResponseReader viscaResponseReader,
+                        ViscaResponseTranslator viscaResponseTranslator
     ) {
-
         this.serialPortName = serialPortName;
         this.serialBaudrate = serialBaudrate;
         this.serialDatabits = serialDatabits;
         this.serialStopBits = serialStopBits;
         this.serialParity = serialParity;
         this.viscaResponseReader = viscaResponseReader;
-
-        serialPort = new SerialPort(serialPortName);
+        this.viscaResponseTranslator = viscaResponseTranslator;
 
         //FIXME: changing when we have port connection
-        //startSerial();
-        //configDevice();
+
     }
+
+    @SneakyThrows
+    @PostConstruct
+    public void setup() {
+        log.debug("Serial opened!");
+        serialPort = new SerialPort(serialPortName);
+
+        startSerial();
+        configDevice();
+    }
+
+    @PreDestroy
+    @SneakyThrows
+    public void teardown() {
+        serialPort.closePort();
+        log.debug("Serial closed!");
+    }
+
+    private void configDevice() {
+        sendCommand(CommandName.ADDRESS);
+        readResponse();
+    }
+
 
     @SneakyThrows
     public String runCommandList(List<CommandName> commandList) {
@@ -65,18 +93,13 @@ public class ViscaService {
 
     @SneakyThrows
     public String runCommand(CommandName commandName) {
-        switch (commandName) {
-            case PAN_TILT_HOME:
-                sendHomeCommand();
-                break;
-            case WAIT:
-                sendWaitCommand();
-                break;
-            default:
-                sendCommand(commandName);
+        if(!commandName.getCommand().isExecutable()) {
+            commandName.getCommand().prepareContent();
+            return "DONE!";
         }
 
-        return readResponse();
+        sendCommand(commandName);
+        return viscaResponseTranslator.translateResponse(readResponse()) + " " + viscaResponseTranslator.translateResponse(readResponse());
     }
 
     private void startSerial() throws SerialPortException {
@@ -84,40 +107,21 @@ public class ViscaService {
         serialPort.setParams(serialBaudrate, serialDatabits, serialStopBits, serialParity);
     }
 
-    private void configDevice() {
-        sendCommand(CommandName.ADDRESS);
-        readResponse();
-        sleep(TIME_SLEEPING);
-
-        sendHomeCommand();
-    }
 
     @SneakyThrows
     private void sendCommand(CommandName commandName) {
-        Preconditions.checkArgument(commandName != CommandName.WAIT);
-        Preconditions.checkArgument(commandName != CommandName.PAN_TILT_HOME);
+        Preconditions.checkArgument(commandName.getCommand().isExecutable());
 
         val command = commandName.getCommand();
-        byte[] cmdData = command.createCommandData();
+        byte[] cmdData = command.prepareContent();
         ViscaCommand vCmd = new ViscaCommand();
         vCmd.commandData = cmdData;
         vCmd.sourceAdr = 0;
-        vCmd.destinationAdr = command.getDestination();
+        vCmd.destinationAdr = command.isBroadcast() ? Constants.BROADCAST_ADDRESS : Constants.DESTINATION_ADDRESS;
         cmdData = vCmd.getViscaCommandData();
         System.out.println("@ " + byteArrayToString(cmdData));
 
         serialPort.writeBytes(cmdData);
-    }
-
-    @SneakyThrows
-    private void sendHomeCommand() {
-        sendCommand(CommandName.PAN_TILT_HOME);
-        sleep(TIME_SLEEPING);
-    }
-
-    @SneakyThrows
-    private void sendWaitCommand() {
-        sleep(((WaitCmd) CommandName.WAIT.getCommand()).getTime());
     }
 
     @SneakyThrows
@@ -127,7 +131,12 @@ public class ViscaService {
     }
 
     private String byteArrayToString(byte[] bytes) {
-        return Stream.of(bytes).map(b -> String.format("%02X", b))
-                .collect(Collectors.joining(" "));
+        StringBuilder sb = new StringBuilder();
+
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+
+        return sb.toString();
     }
 }

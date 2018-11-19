@@ -11,9 +11,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public abstract class Cmd {
-    private byte destination;
+    private boolean isBroadcast;
+    private boolean isExecutable;
 
-    public abstract byte[] createCommandData();
+    public abstract byte[] prepareContent();
 
     protected static byte[] duplicateArray(byte[] src) {
         byte[] dest = new byte[src.length];

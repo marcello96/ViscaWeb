@@ -4,7 +4,7 @@ $(function () {
         var command = 'PAN_TILT_UP';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
-        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
+        $(".commandContent").append(command).append('_').append(tiltSpeed).append(' ');
         var data = {
             'command': command,
             'panSpeed': panSpeed,
@@ -17,7 +17,7 @@ $(function () {
         var command = 'PAN_TILT_DOWN';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
-        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
+        $(".commandContent").append(command).append("_").append(tiltSpeed).append(' ');
         var data = {
             'command': command,
             'panSpeed': panSpeed,
@@ -30,7 +30,7 @@ $(function () {
         var command = 'PAN_TILT_LEFT';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
-        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
+        $(".commandContent").append(command).append("_").append(panSpeed).append(' ');
         var data = {
             'command': command,
             'panSpeed': panSpeed,
@@ -43,7 +43,7 @@ $(function () {
         var command = 'PAN_TILT_RIGHT';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
-        $(".commandContent").append(command).append("_").append(panSpeed).append('_').append(tiltSpeed).append(' ');
+        $(".commandContent").append(command).append("_").append(panSpeed).append(' ');
         var data = {
             'command': command,
             'panSpeed': panSpeed,

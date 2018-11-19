@@ -24,6 +24,14 @@ public class CommandFactory {
             return getWaitCommand(inputCommand);
         }
 
+        if (inputCommand.startsWith(CommandName.CHANGE_ADDRESS.name())) {
+            return getChangeAddress(inputCommand);
+        }
+
+        if (inputCommand.startsWith(CommandName.SET_DEST.name())) {
+            return getSetDest(inputCommand);
+        }
+
         if (inputCommand.startsWith(CommandName.ZOOM_TELE.name())) {
             return getZoomTeleCommand(inputCommand);
         }
@@ -32,19 +40,19 @@ public class CommandFactory {
             return getZoomWideCommand(inputCommand);
         }
 
-        if (inputCommand.startsWith(CommandName.PAN_TILT_UP.name())) {
+        if (inputCommand.startsWith(CommandName.UP.name())) {
             return getPanTiltUpCommand(inputCommand);
         }
 
-        if (inputCommand.startsWith(CommandName.PAN_TILT_DOWN.name())) {
+        if (inputCommand.startsWith(CommandName.DOWN.name())) {
             return getPanTiltDownCommand(inputCommand);
         }
 
-        if (inputCommand.startsWith(CommandName.PAN_TILT_LEFT.name())) {
+        if (inputCommand.startsWith(CommandName.LEFT.name())) {
             return getPanTiltLeftCommand(inputCommand);
         }
 
-        if (inputCommand.startsWith(CommandName.PAN_TILT_RIGHT.name())) {
+        if (inputCommand.startsWith(CommandName.RIGHT.name())) {
             return getPanTiltRightCommand(inputCommand);
         }
 
@@ -54,11 +62,40 @@ public class CommandFactory {
     @SneakyThrows
     private CommandName getWaitCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
-        String time = inputCommand.substring(pos + 1);
         WaitCmd cmd = (WaitCmd) CommandName.WAIT.getCommand();
-        cmd.setTime(Integer.parseInt(time));
+
+        if(pos != -1) {
+            String time = inputCommand.substring(pos + 1);
+            cmd.setTime(Integer.parseInt(time));
+        }
 
         return CommandName.WAIT;
+    }
+
+    @SneakyThrows
+    private CommandName getSetDest(String inputCommand) {
+        int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
+
+        SetDestCmd cmd = (SetDestCmd) CommandName.SET_DEST.getCommand();
+        if (pos != -1) {
+            String address = inputCommand.substring(pos + 1);
+            cmd.setAddress(Byte.parseByte(address));
+        }
+
+        return CommandName.SET_DEST;
+    }
+
+    @SneakyThrows
+    private CommandName getChangeAddress(String inputCommand) {
+        int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
+
+        ChangeAddressCmd cmd = (ChangeAddressCmd) CommandName.CHANGE_ADDRESS.getCommand();
+        if (pos != -1) {
+            String address = inputCommand.substring(pos + 1);
+            cmd.setNewAddress(Byte.parseByte(address));
+        }
+
+        return CommandName.CHANGE_ADDRESS;
     }
 
     @SneakyThrows
@@ -95,97 +132,64 @@ public class CommandFactory {
 
     @SneakyThrows
     private CommandName getPanTiltUpCommand(String inputCommand) {
-        int pos = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_") + 1) + 1);
+        int pos = inputCommand.indexOf("_");
 
-        int pos2 = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_",
-                                inputCommand.indexOf("_") + 1) + 1) + 1);
-
-        PanTiltUpCmd cmd = (PanTiltUpCmd) CommandName.PAN_TILT_UP.getCommand();
-        if (pos == -1 || pos2 == -1) {
-            return CommandName.PAN_TILT_UP;
+        PanTiltUpCmd cmd = (PanTiltUpCmd) CommandName.UP.getCommand();
+        if (pos == -1) {
+            return CommandName.UP;
         }
 
-        String panSpeed = inputCommand.substring(pos + 1, pos2);
-        String tiltSpeed = inputCommand.substring(pos2 + 1);
+        String tiltSpeed = inputCommand.substring(pos + 1);
+        cmd.setSpeed(ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
-
-        return CommandName.PAN_TILT_UP;
+        return CommandName.UP;
     }
 
     @SneakyThrows
     private CommandName getPanTiltDownCommand(String inputCommand) {
-        int pos = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_") + 1) + 1);
+        int pos = inputCommand.indexOf("_");
 
-        int pos2 = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_",
-                                inputCommand.indexOf("_") + 1) + 1) + 1);
+        PanTiltDownCmd cmd = (PanTiltDownCmd) CommandName.DOWN.getCommand();
 
-        PanTiltDownCmd cmd = (PanTiltDownCmd) CommandName.PAN_TILT_DOWN.getCommand();
-
-        if (pos == -1 || pos2 == -1) {
-            return CommandName.PAN_TILT_DOWN;
+        if (pos == -1) {
+            return CommandName.DOWN;
         }
 
-        String panSpeed = inputCommand.substring(pos + 1, pos2);
-        String tiltSpeed = inputCommand.substring(pos2 + 1);
-        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
+        String tiltSpeed = inputCommand.substring(pos + 1);
+        cmd.setSpeed(ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        return CommandName.PAN_TILT_DOWN;
+        return CommandName.DOWN;
     }
 
     @SneakyThrows
     private CommandName getPanTiltLeftCommand(String inputCommand) {
-        int pos = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_") + 1) + 1);
+        int pos = inputCommand.indexOf("_");
 
-        int pos2 = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_",
-                                inputCommand.indexOf("_") + 1) + 1) + 1);
+        PanTiltLeftCmd cmd = (PanTiltLeftCmd) CommandName.LEFT.getCommand();
 
-        PanTiltLeftCmd cmd = (PanTiltLeftCmd) CommandName.PAN_TILT_LEFT.getCommand();
-
-        if (pos == -1 || pos2 == -1) {
-            return CommandName.PAN_TILT_LEFT;
+        if (pos == -1) {
+            return CommandName.LEFT;
         }
 
-        String panSpeed = inputCommand.substring(pos + 1, pos2);
-        String tiltSpeed = inputCommand.substring(pos2 + 1);
-        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
+        String panSpeed = inputCommand.substring(pos + 1);
+        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed));
 
-        return CommandName.PAN_TILT_LEFT;
+        return CommandName.LEFT;
     }
 
     @SneakyThrows
     private CommandName getPanTiltRightCommand(String inputCommand) {
-        int pos = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_") + 1) + 1);
+        int pos = inputCommand.indexOf("_");
 
-        int pos2 = inputCommand.indexOf("_",
-                inputCommand.indexOf("_",
-                        inputCommand.indexOf("_",
-                                inputCommand.indexOf("_") + 1) + 1) + 1);
+        PanTiltRightCmd cmd = (PanTiltRightCmd) CommandName.RIGHT.getCommand();
 
-        PanTiltRightCmd cmd = (PanTiltRightCmd) CommandName.PAN_TILT_RIGHT.getCommand();
-
-        if (pos == -1 || pos2 == -1) {
-            return CommandName.PAN_TILT_RIGHT;
+        if (pos == -1) {
+            return CommandName.RIGHT;
         }
 
-        String panSpeed = inputCommand.substring(pos + 1, pos2);
-        String tiltSpeed = inputCommand.substring(pos2 + 1);
-        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed), ConstantTiltSpeed.valueOf(tiltSpeed));
+        String panSpeed = inputCommand.substring(pos + 1);
+        cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed));
 
-        return CommandName.PAN_TILT_RIGHT;
+        return CommandName.RIGHT;
     }
 }

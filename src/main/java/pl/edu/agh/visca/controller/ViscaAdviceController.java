@@ -14,5 +14,4 @@ public class ViscaAdviceController {
     public ResponseEntity<String> handleInvalidArgument(Exception e) {
         return ResponseEntity.badRequest().body("Invalid command:" + e.getMessage());
     }
-
 }

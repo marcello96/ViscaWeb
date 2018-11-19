@@ -1,6 +1,7 @@
 package pl.edu.agh.visca.controller.api;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.visca.cmd.*;
 import pl.edu.agh.visca.model.CommandName;
+import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaService;
 
 import static pl.edu.agh.visca.model.CommandName.*;
@@ -18,37 +20,38 @@ import static pl.edu.agh.visca.model.CommandName.*;
 @RestController
 @RequestMapping("/controller/position")
 @AllArgsConstructor
+@Slf4j
 public class PositionController {
-    private static final Logger logger = LoggerFactory.getLogger(PositionController.class);
-
     private final ViscaService viscaService;
 
     @RequestMapping(method = RequestMethod.POST)
-    private ResponseEntity changePosition(@RequestParam String command, @RequestParam ConstantPanSpeed panSpeed, @RequestParam ConstantTiltSpeed tiltSpeed) {
+    public ResponseEntity changePosition(@RequestParam String command, @RequestParam ConstantPanSpeed panSpeed, @RequestParam ConstantTiltSpeed tiltSpeed,
+                                         @RequestParam(defaultValue = "1") String address) {
 
         val commandName = CommandName.valueOf(command);
         String response;
+        Constants.DESTINATION_ADDRESS = Byte.parseByte(address);
         try {
             switch (commandName) {
-                case PAN_TILT_UP:
+                case UP:
                     val commandUp = (PanTiltUpCmd) commandName.getCommand();
-                    commandUp.setSpeed(panSpeed, tiltSpeed);
-                    response = viscaService.runCommand(PAN_TILT_UP);
+                    commandUp.setSpeed(tiltSpeed);
+                    response = viscaService.runCommand(UP);
                     break;
-                case PAN_TILT_DOWN:
+                case DOWN:
                     val commandDown = (PanTiltDownCmd) commandName.getCommand();
-                    commandDown.setSpeed(panSpeed, tiltSpeed);
-                    response = viscaService.runCommand(PAN_TILT_DOWN);
+                    commandDown.setSpeed(tiltSpeed);
+                    response = viscaService.runCommand(DOWN);
                     break;
-                case PAN_TILT_LEFT:
+                case LEFT:
                     val commandLeft = (PanTiltLeftCmd) commandName.getCommand();
-                    commandLeft.setSpeed(panSpeed, tiltSpeed);
-                    response = viscaService.runCommand(PAN_TILT_LEFT);
+                    commandLeft.setSpeed(panSpeed);
+                    response = viscaService.runCommand(LEFT);
                     break;
-                case PAN_TILT_RIGHT:
+                case RIGHT:
                     val commandRight = (PanTiltRightCmd) commandName.getCommand();
-                    commandRight.setSpeed(panSpeed, tiltSpeed);
-                    response = viscaService.runCommand(PAN_TILT_RIGHT);
+                    commandRight.setSpeed(panSpeed);
+                    response = viscaService.runCommand(RIGHT);
                     break;
                 default:
                     throw new IllegalArgumentException("This is not position command: UP, DOWN, LEFT, RIGHT");
@@ -58,7 +61,7 @@ public class PositionController {
             response = e.getMessage();
         }
 
-        logger.debug("Response: " + response);
+        log.debug("Response: " + response);
         return ResponseEntity.ok(response);
     }
 }

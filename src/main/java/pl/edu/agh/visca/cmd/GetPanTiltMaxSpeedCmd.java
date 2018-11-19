@@ -11,11 +11,11 @@ public final class GetPanTiltMaxSpeedCmd extends Cmd {
     private static final byte[] maxSpeedCommandData = new byte[]{9, 6, 17};
 
     public GetPanTiltMaxSpeedCmd() {
-        super(Constants.DESTINATION_ADDRESS);
+        super(false, true);
     }
 
     @Override
-    public byte[] createCommandData() {
+    public byte[] prepareContent() {
         return duplicateArray(maxSpeedCommandData);
     }
 }
