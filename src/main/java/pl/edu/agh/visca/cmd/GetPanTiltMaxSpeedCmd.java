@@ -5,8 +5,6 @@
 
 package pl.edu.agh.visca.cmd;
 
-import pl.edu.agh.visca.model.Constants;
-
 public final class GetPanTiltMaxSpeedCmd extends Cmd {
     private static final byte[] maxSpeedCommandData = new byte[]{9, 6, 17};
 

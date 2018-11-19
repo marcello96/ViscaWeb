@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.visca.cmd.ChangeAddressCmd;
-import pl.edu.agh.visca.cmd.WaitCmd;
 import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaService;

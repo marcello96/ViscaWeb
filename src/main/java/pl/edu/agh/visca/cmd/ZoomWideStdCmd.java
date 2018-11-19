@@ -7,7 +7,6 @@ package pl.edu.agh.visca.cmd;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.edu.agh.visca.model.Constants;
 
 public final class ZoomWideStdCmd extends Cmd {
     private static final byte[] ptWideStdCommandData = new byte[]{1, 4, 7, 0x00};

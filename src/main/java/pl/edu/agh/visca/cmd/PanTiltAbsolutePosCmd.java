@@ -5,8 +5,6 @@
 
 package pl.edu.agh.visca.cmd;
 
-import pl.edu.agh.visca.model.Constants;
-
 public final class PanTiltAbsolutePosCmd extends Cmd {
     private static final byte[] ptAbsolutPosCommandData = new byte[]{1, 6, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 

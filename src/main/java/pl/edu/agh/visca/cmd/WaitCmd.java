@@ -2,7 +2,6 @@ package pl.edu.agh.visca.cmd;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.edu.agh.visca.model.Constants;
 
 import static pl.edu.agh.visca.service.SleepUtility.sleep;
 

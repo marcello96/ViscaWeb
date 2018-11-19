@@ -5,8 +5,6 @@
 
 package pl.edu.agh.visca.cmd;
 
-import pl.edu.agh.visca.model.Constants;
-
 public final class AddressCmd extends Cmd {
     private static final byte[] adrCommmandData = new byte[]{48, 1};
 

@@ -7,11 +7,9 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.visca.cmd.ViscaCommand;
-import pl.edu.agh.visca.cmd.WaitCmd;
 import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.model.Constants;
 
@@ -19,8 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static pl.edu.agh.visca.service.SleepUtility.sleep;
 
 @Service
 @Getter

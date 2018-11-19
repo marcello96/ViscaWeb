@@ -5,8 +5,6 @@
 
 package pl.edu.agh.visca.cmd;
 
-import pl.edu.agh.visca.model.Constants;
-
 public final class PanTiltHomeCmd extends Cmd {
     private static final byte[] ptHomeCommandData = new byte[]{1, 6, 4};
 
