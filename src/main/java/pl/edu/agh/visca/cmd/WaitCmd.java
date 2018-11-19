@@ -2,6 +2,7 @@ package pl.edu.agh.visca.cmd;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import static pl.edu.agh.visca.service.SleepUtility.sleep;
 
@@ -17,6 +18,7 @@ public class WaitCmd extends Cmd {
     }
 
     @Override
+    @SneakyThrows
     public byte[] prepareContent() {
         sleep(time);
         return new byte[0];

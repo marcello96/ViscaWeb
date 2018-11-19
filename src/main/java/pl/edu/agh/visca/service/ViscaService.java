@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Getter
 @Slf4j
 public class ViscaService {
-    private static final int TIME_SLEEPING = 3;
+    private static final int TIME_SLEEPING = 2;
 
     private final String serialPortName;
     private final int serialBaudrate;
@@ -52,19 +52,17 @@ public class ViscaService {
         this.serialParity = serialParity;
         this.viscaResponseReader = viscaResponseReader;
         this.viscaResponseTranslator = viscaResponseTranslator;
-
-        //FIXME: changing when we have port connection
-
     }
 
     @SneakyThrows
     @PostConstruct
     public void setup() {
+        //FIXME: changing when we have port connection
         log.debug("Serial opened!");
-        serialPort = new SerialPort(serialPortName);
+        /*serialPort = new SerialPort(serialPortName);
 
         startSerial();
-        configDevice();
+        configDevice();*/
     }
 
     @PreDestroy
@@ -81,14 +79,14 @@ public class ViscaService {
 
 
     @SneakyThrows
-    public String runCommandList(List<CommandName> commandList) {
+    public synchronized String runCommandList(List<CommandName> commandList) {
         return commandList.stream()
                 .map(this::runCommand)
                 .collect(Collectors.joining("\n"));
     }
 
     @SneakyThrows
-    public String runCommand(CommandName commandName) {
+    public synchronized String runCommand(CommandName commandName) {
         if(!commandName.getCommand().isExecutable()) {
             commandName.getCommand().prepareContent();
             return "DONE!";

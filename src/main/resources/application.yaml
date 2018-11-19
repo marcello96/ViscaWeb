@@ -3,7 +3,13 @@ spring:
   profiles.active: local
   thymeleaf:
     prefix: classpath:/thymeleaf/
-    mode: LEGACYHTML5
+    mode: HTML
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    cache: false
 
 
 serial:

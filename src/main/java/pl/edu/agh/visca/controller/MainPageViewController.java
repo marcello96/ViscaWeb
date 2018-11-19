@@ -12,9 +12,11 @@ import pl.edu.agh.visca.service.macro.ViscaMacroHolder;
 @AllArgsConstructor
 public class MainPageViewController {
 
+    private final ViscaMacroHolder viscaMacroHolder;
+
     @RequestMapping(method = RequestMethod.GET)
     public String loadMainPage(Model model) {
-        model.addAttribute("listMacro", ViscaMacroHolder.getAllMacro());
+        model.addAttribute("listMacro", viscaMacroHolder.getAllMacro());
         return "mainPage";
     }
 }

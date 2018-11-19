@@ -22,6 +22,7 @@ public class MacroController {
 
     private final ViscaService viscaService;
     private final ViscaParserService viscaParserService;
+    private final ViscaMacroHolder viscaMacroHolder;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity addMacro(@RequestParam String macroName, @RequestParam String macroContent) {
@@ -31,7 +32,7 @@ public class MacroController {
                 throw new IllegalArgumentException("Can not create macro for empty macroName or macroContent");
 
             val commandNames = viscaParserService.parseCommandInput(macroContent.trim());
-            ViscaMacroHolder.addMacro(new Macro(macroName, commandNames));
+            viscaMacroHolder.addMacro(new Macro(macroName, commandNames));
             //response = viscaService.runCommandList(commandNames);
         } catch (Exception e) {
             response = e.getMessage();
@@ -46,7 +47,7 @@ public class MacroController {
     public ResponseEntity runMacro(@RequestParam String macroName) {
         String response;
         try {
-            val macro = ViscaMacroHolder.getMacro(macroName);
+            val macro = viscaMacroHolder.getMacro(macroName);
             response = viscaService.runCommandList(macro.getContent());
         } catch (Exception e) {
             response = e.getMessage();

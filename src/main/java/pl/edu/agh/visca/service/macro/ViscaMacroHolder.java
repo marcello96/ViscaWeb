@@ -10,22 +10,26 @@ import java.util.Map;
 
 public class ViscaMacroHolder {
 
-    private static Map<String, Macro> macroMap = new HashMap<>();
+    private Map<String, Macro> macroMap;
 
-    public static void addMacro(Macro macro) {
+    public ViscaMacroHolder() {
+        macroMap = new HashMap<>();
+    }
+
+    public void addMacro(Macro macro) {
         macroMap.put(macro.getName(), macro);
     }
 
-    public static Macro getMacro(String name) {
+    public Macro getMacro(String name) {
         Preconditions.checkArgument(MapUtils.isNotEmpty(macroMap) && macroMap.containsKey(name));
         return macroMap.get(name);
     }
 
-    public static List<String> getAllMacroName() {
+    public List<String> getAllMacroName() {
         return new ArrayList<>(macroMap.keySet());
     }
 
-    public static List<Macro> getAllMacro() {
+    public List<Macro> getAllMacro() {
         return new ArrayList<>(macroMap.values());
     }
 }

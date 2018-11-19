@@ -1,7 +1,7 @@
 $(function () {
 
     $('.visca-position-up').on('click', function () {
-        var command = 'PAN_TILT_UP';
+        var command = 'UP';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
         $(".commandContent").append(command).append('_').append(tiltSpeed).append(' ');
@@ -14,7 +14,7 @@ $(function () {
     });
 
     $('.visca-position-down').on('click', function () {
-        var command = 'PAN_TILT_DOWN';
+        var command = 'DOWN';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
         $(".commandContent").append(command).append("_").append(tiltSpeed).append(' ');
@@ -27,7 +27,7 @@ $(function () {
     });
 
     $('.visca-position-left').on('click', function () {
-        var command = 'PAN_TILT_LEFT';
+        var command = 'LEFT';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
         $(".commandContent").append(command).append("_").append(panSpeed).append(' ');
@@ -40,7 +40,7 @@ $(function () {
     });
 
     $('.visca-position-right').on('click', function () {
-        var command = 'PAN_TILT_RIGHT';
+        var command = 'RIGHT';
         var panSpeed = $('#pan-speed').eq(0).val();
         var tiltSpeed = $('#tilt-speed').eq(0).val();
         $(".commandContent").append(command).append("_").append(panSpeed).append(' ');
@@ -75,7 +75,7 @@ $(function () {
     });
 
     $('.visca-other-home').on('click', function () {
-        var command = 'PAN_TILT_HOME';
+        var command = 'HOME';
         $(".commandContent").append(command).append(' ');
         var data = {
            'command': command
@@ -92,6 +92,17 @@ $(function () {
                'time': time
         };
         postAPI('/wait', data);
+     });
+
+     $('.visca-change-address').on('click', function () {
+             var command = 'CHANGE_ADDRESS';
+             var newAddress = $('#change-address').eq(0).val();
+             $(".commandContent").append(command).append('_').append(newAddress).append(' ');
+             var data = {
+                    'command': command,
+                    'newAddress': newAddress
+             };
+             postAPI('/address', data);
      });
 
     $('.visca-submit-command').on('click', function () {

@@ -1,11 +1,10 @@
 package pl.edu.agh.visca.service;
 
+import lombok.SneakyThrows;
+
 public class SleepUtility {
+    @SneakyThrows
     public static void sleep(int timeSec) {
-        try {
-            Thread.sleep((long) (timeSec * 1000));
-        } catch (InterruptedException var2) {
-            var2.printStackTrace();
-        }
+        Thread.sleep((long) (timeSec * 1000));
     }
 }

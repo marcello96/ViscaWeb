@@ -131,6 +131,21 @@
         </section>
     </div>
 
+    <div class="row">
+        <div class="col-lg-5">
+            <h3>Address</h3>
+            <select class="form-control" id="change-address">
+                <option th:each="i : ${#numbers.sequence(0, 7)}" th:value="${i}" th:text="${i}">
+                </option>
+            </select>
+        </div>
+
+        <section class="col-lg-5">
+            <h3>Change Address</h3>
+            <button type="button" class="btn btn-warning visca-change-address">Change Address</button>
+        </section>
+    </div>
+
     <br>
     <div class="row">
         <h3 class="col-lg-5">Response from visca</h3>
