@@ -1,8 +1,9 @@
-server.port: 8080
-spring.profiles.active: local
-spring.thymeleaf:
-  prefix: classpath:/thymeleaf/
-  mode: LEGACYHTML5
+serverport: 8080
+spring:
+  profiles.active: local
+  thymeleaf:
+    prefix: classpath:/thymeleaf/
+    mode: LEGACYHTML5
 
 
 serial:
