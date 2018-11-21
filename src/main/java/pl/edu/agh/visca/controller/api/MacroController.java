@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaParserService;
 import pl.edu.agh.visca.service.ViscaService;
 import pl.edu.agh.visca.service.macro.Macro;
@@ -25,8 +26,11 @@ public class MacroController {
     private final ViscaMacroHolder viscaMacroHolder;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity addMacro(@RequestParam String macroName, @RequestParam String macroContent) {
-        String response =  "OK";
+    public ResponseEntity addMacro(@RequestParam String macroName,
+                                   @RequestParam String macroContent,
+                                   @RequestParam(defaultValue = "1") String address) {
+        Constants.DESTINATION_ADDRESS = Byte.parseByte(address);
+        String response = "OK";
         try {
             if (StringUtils.isBlank(macroName) || StringUtils.isBlank(macroContent))
                 throw new IllegalArgumentException("Can not create macro for empty macroName or macroContent");
