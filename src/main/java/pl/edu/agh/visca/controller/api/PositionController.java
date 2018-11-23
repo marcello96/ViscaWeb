@@ -13,8 +13,6 @@ import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaService;
 
-import static pl.edu.agh.visca.model.CommandName.*;
-
 @RestController
 @RequestMapping("/controller/position")
 @AllArgsConstructor
@@ -34,22 +32,22 @@ public class PositionController {
                 case UP:
                     val commandUp = (PanTiltUpCmd) commandName.getCommand();
                     commandUp.setSpeed(tiltSpeed);
-                    response = viscaService.runCommand(UP);
+                    response = viscaService.runCommand(commandUp);
                     break;
                 case DOWN:
                     val commandDown = (PanTiltDownCmd) commandName.getCommand();
                     commandDown.setSpeed(tiltSpeed);
-                    response = viscaService.runCommand(DOWN);
+                    response = viscaService.runCommand(commandDown);
                     break;
                 case LEFT:
                     val commandLeft = (PanTiltLeftCmd) commandName.getCommand();
                     commandLeft.setSpeed(panSpeed);
-                    response = viscaService.runCommand(LEFT);
+                    response = viscaService.runCommand(commandLeft);
                     break;
                 case RIGHT:
                     val commandRight = (PanTiltRightCmd) commandName.getCommand();
                     commandRight.setSpeed(panSpeed);
-                    response = viscaService.runCommand(RIGHT);
+                    response = viscaService.runCommand(commandRight);
                     break;
                 default:
                     throw new IllegalArgumentException("This is not position command: UP, DOWN, LEFT, RIGHT");

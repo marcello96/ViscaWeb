@@ -29,7 +29,7 @@ public class HomeController {
             val commandName = CommandName.valueOf(command);
             if (commandName != CommandName.HOME)
                 throw new IllegalArgumentException("This is not home command");
-            response = viscaService.runCommand(CommandName.HOME);
+            response = viscaService.runCommand(commandName.getCommand());
         } catch (Exception e) {
             response = e.getMessage();
         }

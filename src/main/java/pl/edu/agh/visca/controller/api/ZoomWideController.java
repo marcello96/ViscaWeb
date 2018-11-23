@@ -13,8 +13,6 @@ import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaService;
 
-import static pl.edu.agh.visca.model.CommandName.ZOOM_WIDE;
-
 @RestController
 @RequestMapping("/controller/zoom-wide")
 @AllArgsConstructor
@@ -33,7 +31,7 @@ public class ZoomWideController {
             val commandName = CommandName.valueOf(command);
             val realCommand = (ZoomWideStdCmd) commandName.getCommand();
             realCommand.setSpeed(speed);
-            response = viscaService.runCommand(ZOOM_WIDE);
+            response = viscaService.runCommand(realCommand);
         } catch (Exception e) {
             response = e.getMessage();
         }

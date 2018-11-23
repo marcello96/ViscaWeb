@@ -23,4 +23,9 @@ public class WaitCmd extends Cmd {
         sleep(time);
         return new byte[0];
     }
+
+    @Override
+    public String toString() {
+        return "WAIT_" + time;
+    }
 }

@@ -14,8 +14,6 @@ import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaService;
 
-import static pl.edu.agh.visca.model.CommandName.ZOOM_TELE;
-
 @RestController
 @RequestMapping("/controller/zoom-tele")
 @AllArgsConstructor
@@ -34,7 +32,7 @@ public class ZoomTeleController {
             val commandName = CommandName.valueOf(command);
             val realCommand = (ZoomTeleStdCmd) commandName.getCommand();
             realCommand.setSpeed(speed);
-            response = viscaService.runCommand(ZOOM_TELE);
+            response = viscaService.runCommand(realCommand);
         } catch (Exception e) {
             response = e.getMessage();
         }

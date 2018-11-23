@@ -6,9 +6,9 @@ import jssc.SerialPortException;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.visca.cmd.Cmd;
 import pl.edu.agh.visca.cmd.ViscaCommand;
 import pl.edu.agh.visca.model.CommandName;
 import pl.edu.agh.visca.model.Constants;
@@ -59,10 +59,10 @@ public class ViscaService {
     public void setup() {
         //FIXME: changing when we have port connection
         log.debug("Serial opened!");
-        /*serialPort = new SerialPort(serialPortName);
+        serialPort = new SerialPort(serialPortName);
 
         startSerial();
-        configDevice();*/
+        configDevice();
     }
 
     @PreDestroy
@@ -73,27 +73,32 @@ public class ViscaService {
     }
 
     private void configDevice() {
-        sendCommand(CommandName.ADDRESS);
+        sendCommand(CommandName.ADDRESS.getCommand());
         readResponse();
     }
 
 
     @SneakyThrows
-    public synchronized String runCommandList(List<CommandName> commandList) {
+    public synchronized String runCommandList(List<Cmd> commandList) {
         return commandList.stream()
                 .map(this::runCommand)
                 .collect(Collectors.joining("\n"));
     }
 
     @SneakyThrows
-    public synchronized String runCommand(CommandName commandName) {
-        if(!commandName.getCommand().isExecutable()) {
-            commandName.getCommand().prepareContent();
+    public synchronized String runCommand(Cmd commandName) {
+        if(!commandName.isExecutable()) {
+            commandName.prepareContent();
             return "DONE!";
         }
 
         sendCommand(commandName);
-        return viscaResponseTranslator.translateResponse(readResponse()) + " " + viscaResponseTranslator.translateResponse(readResponse());
+        String response = viscaResponseTranslator.translateResponse(readResponse());
+        if (response.equals("ACK")) {
+            String response2 = viscaResponseTranslator.translateResponse(readResponse());
+            return  response + " " + response2;
+        }
+        return response;
     }
 
     private void startSerial() throws SerialPortException {
@@ -103,10 +108,9 @@ public class ViscaService {
 
 
     @SneakyThrows
-    private void sendCommand(CommandName commandName) {
-        Preconditions.checkArgument(commandName.getCommand().isExecutable());
+    private void sendCommand(Cmd command) {
+        Preconditions.checkArgument(command.isExecutable());
 
-        val command = commandName.getCommand();
         byte[] cmdData = command.prepareContent();
         ViscaCommand vCmd = new ViscaCommand();
         vCmd.commandData = cmdData;

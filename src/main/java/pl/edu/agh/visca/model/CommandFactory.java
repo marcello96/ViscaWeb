@@ -12,14 +12,14 @@ import java.util.stream.Stream;
 public class CommandFactory {
 
     @SneakyThrows
-    public List<CommandName> createCommandList(String[] inputCommands) {
+    public List<Cmd> createCommandList(String[] inputCommands) {
         return Stream.of(inputCommands)
                 .map(this::createCommand)
                 .collect(Collectors.toList());
     }
 
     @SneakyThrows
-    private CommandName createCommand(String inputCommand) {
+    private Cmd createCommand(String inputCommand) {
         if (inputCommand.startsWith(CommandName.WAIT.name())) {
             return getWaitCommand(inputCommand);
         }
@@ -56,11 +56,11 @@ public class CommandFactory {
             return getPanTiltRightCommand(inputCommand);
         }
 
-        return CommandName.valueOf(inputCommand);
+        return CommandName.valueOf(inputCommand).getCommand();
     }
 
     @SneakyThrows
-    private CommandName getWaitCommand(String inputCommand) {
+    private Cmd getWaitCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
         WaitCmd cmd = (WaitCmd) CommandName.WAIT.getCommand();
 
@@ -69,11 +69,11 @@ public class CommandFactory {
             cmd.setTime(Integer.parseInt(time));
         }
 
-        return CommandName.WAIT;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getSetDest(String inputCommand) {
+    private Cmd getSetDest(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         SetDestCmd cmd = (SetDestCmd) CommandName.SET_DEST.getCommand();
@@ -82,11 +82,11 @@ public class CommandFactory {
             cmd.setAddress(Byte.parseByte(address));
         }
 
-        return CommandName.SET_DEST;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getChangeAddress(String inputCommand) {
+    private Cmd getChangeAddress(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ChangeAddressCmd cmd = (ChangeAddressCmd) CommandName.CHANGE_ADDRESS.getCommand();
@@ -95,101 +95,101 @@ public class CommandFactory {
             cmd.setNewAddress(Byte.parseByte(address));
         }
 
-        return CommandName.CHANGE_ADDRESS;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getZoomTeleCommand(String inputCommand) {
+    private Cmd getZoomTeleCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ZoomTeleStdCmd cmd = (ZoomTeleStdCmd) CommandName.ZOOM_TELE.getCommand();
 
         if (pos == -1) {
-            return CommandName.ZOOM_TELE;
+            return cmd;
         }
 
         String speed = inputCommand.substring(pos + 1);
         cmd.setSpeed(ZoomTeleStdCmd.CONSTANT_SPEED.valueOf(speed));
 
-        return CommandName.ZOOM_TELE;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getZoomWideCommand(String inputCommand) {
+    private Cmd getZoomWideCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_", inputCommand.indexOf("_") + 1);
 
         ZoomWideStdCmd cmd = (ZoomWideStdCmd) CommandName.ZOOM_WIDE.getCommand();
 
         if (pos == -1) {
-            return CommandName.ZOOM_WIDE;
+            return cmd;
         }
 
         String speed = inputCommand.substring(pos + 1);
         cmd.setSpeed(ZoomWideStdCmd.CONSTANT_SPEED.valueOf(speed));
 
-        return CommandName.ZOOM_WIDE;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getPanTiltUpCommand(String inputCommand) {
+    private Cmd getPanTiltUpCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
 
         PanTiltUpCmd cmd = (PanTiltUpCmd) CommandName.UP.getCommand();
         if (pos == -1) {
-            return CommandName.UP;
+            return cmd;
         }
 
         String tiltSpeed = inputCommand.substring(pos + 1);
         cmd.setSpeed(ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        return CommandName.UP;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getPanTiltDownCommand(String inputCommand) {
+    private Cmd getPanTiltDownCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
 
         PanTiltDownCmd cmd = (PanTiltDownCmd) CommandName.DOWN.getCommand();
 
         if (pos == -1) {
-            return CommandName.DOWN;
+            return cmd;
         }
 
         String tiltSpeed = inputCommand.substring(pos + 1);
         cmd.setSpeed(ConstantTiltSpeed.valueOf(tiltSpeed));
 
-        return CommandName.DOWN;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getPanTiltLeftCommand(String inputCommand) {
+    private Cmd getPanTiltLeftCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
 
         PanTiltLeftCmd cmd = (PanTiltLeftCmd) CommandName.LEFT.getCommand();
 
         if (pos == -1) {
-            return CommandName.LEFT;
+            return cmd;
         }
 
         String panSpeed = inputCommand.substring(pos + 1);
         cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed));
 
-        return CommandName.LEFT;
+        return cmd;
     }
 
     @SneakyThrows
-    private CommandName getPanTiltRightCommand(String inputCommand) {
+    private Cmd getPanTiltRightCommand(String inputCommand) {
         int pos = inputCommand.indexOf("_");
 
         PanTiltRightCmd cmd = (PanTiltRightCmd) CommandName.RIGHT.getCommand();
 
         if (pos == -1) {
-            return CommandName.RIGHT;
+            return cmd;
         }
 
         String panSpeed = inputCommand.substring(pos + 1);
         cmd.setSpeed(ConstantPanSpeed.valueOf(panSpeed));
 
-        return CommandName.RIGHT;
+        return cmd;
     }
 }

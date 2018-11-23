@@ -16,4 +16,9 @@ public final class PanTiltHomeCmd extends Cmd {
     public byte[] prepareContent() {
         return duplicateArray(ptHomeCommandData);
     }
+
+    @Override
+    public String toString() {
+        return "HOME";
+    }
 }

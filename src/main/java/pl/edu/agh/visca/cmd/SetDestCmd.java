@@ -19,4 +19,9 @@ public class SetDestCmd extends Cmd {
         Constants.DESTINATION_ADDRESS = address;
         return new byte[0];
     }
+
+    @Override
+    public String toString() {
+        return "SET_DEST_" + address;
+    }
 }

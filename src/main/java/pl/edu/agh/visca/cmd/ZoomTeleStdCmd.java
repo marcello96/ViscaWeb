@@ -10,6 +10,8 @@ import lombok.Getter;
 
 public final class ZoomTeleStdCmd extends Cmd {
     private static final byte[] ptTeleStdCommandData = new byte[]{1, 4, 7, 0x00};
+    private CONSTANT_SPEED speed;
+
 
     public ZoomTeleStdCmd() {
         super(false, true);
@@ -17,6 +19,7 @@ public final class ZoomTeleStdCmd extends Cmd {
     }
 
     public void setSpeed(final CONSTANT_SPEED speed) {
+        this.speed = speed;
         ptTeleStdCommandData[3] = speed.value;
     }
 
@@ -43,5 +46,10 @@ public final class ZoomTeleStdCmd extends Cmd {
         public String getName() {
             return name();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ZOOM_TELE_" + speed.name();
     }
 }

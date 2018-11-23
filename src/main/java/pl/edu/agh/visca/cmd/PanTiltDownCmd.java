@@ -7,6 +7,7 @@ package pl.edu.agh.visca.cmd;
 
 public final class PanTiltDownCmd extends Cmd {
     private static final byte[] ptUpCommandData = new byte[]{1, 6, 1, 0x00, 0x00, 3, 2};
+    private ConstantTiltSpeed tiltSpeed;
 
     public PanTiltDownCmd() {
         super(false, true);
@@ -21,6 +22,12 @@ public final class PanTiltDownCmd extends Cmd {
     }
 
     public void setSpeed(ConstantTiltSpeed tiltSpeed) {
+        this.tiltSpeed = tiltSpeed;
         ptUpCommandData[4] = tiltSpeed.getValue();
+    }
+
+    @Override
+    public String toString() {
+        return tiltSpeed != null ? "DOWN_" + tiltSpeed.name() : "DOWN";
     }
 }

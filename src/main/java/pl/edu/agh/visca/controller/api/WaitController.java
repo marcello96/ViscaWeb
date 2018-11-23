@@ -32,7 +32,7 @@ public class WaitController {
                 throw new IllegalArgumentException("This is not home command");
             val waitCommand = (WaitCmd) commandName.getCommand();
             waitCommand.setTime(Integer.parseInt(time));
-            response = viscaService.runCommand(CommandName.WAIT);
+            response = viscaService.runCommand(waitCommand);
         } catch (Exception e) {
             response = e.getMessage();
         }

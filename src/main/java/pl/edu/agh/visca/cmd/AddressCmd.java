@@ -16,4 +16,9 @@ public final class AddressCmd extends Cmd {
     public byte[] prepareContent() {
         return duplicateArray(adrCommmandData);
     }
+
+    @Override
+    public String toString() {
+        return "ADDRESS";
+    }
 }

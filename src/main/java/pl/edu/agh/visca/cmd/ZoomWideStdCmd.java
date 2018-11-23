@@ -10,6 +10,7 @@ import lombok.Getter;
 
 public final class ZoomWideStdCmd extends Cmd {
     private static final byte[] ptWideStdCommandData = new byte[]{1, 4, 7, 0x00};
+    private CONSTANT_SPEED speed;
 
     public ZoomWideStdCmd() {
         super(false, true);
@@ -17,6 +18,7 @@ public final class ZoomWideStdCmd extends Cmd {
     }
 
     public void setSpeed(final CONSTANT_SPEED speed) {
+        this.speed = speed;
         ptWideStdCommandData[3] = speed.value;
     }
 
@@ -44,5 +46,10 @@ public final class ZoomWideStdCmd extends Cmd {
         public String getName() {
             return name();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ZOOM_WIDE" + speed.name();
     }
 }

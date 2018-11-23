@@ -16,4 +16,10 @@ public final class GetPanTiltMaxSpeedCmd extends Cmd {
     public byte[] prepareContent() {
         return duplicateArray(maxSpeedCommandData);
     }
+
+    @Override
+    public String toString() {
+        return "GET_MAX_SPEED";
+    }
+
 }

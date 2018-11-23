@@ -33,7 +33,7 @@ public class ChangeAddressController {
                 throw new IllegalArgumentException("This is not change addresss command");
             val changeAddressCmd = (ChangeAddressCmd) commandName.getCommand();
             changeAddressCmd.setNewAddress(Byte.parseByte(newAddress));
-            response = viscaService.runCommand(CommandName.CHANGE_ADDRESS);
+            response = viscaService.runCommand(changeAddressCmd);
         } catch (Exception e) {
             response = e.getMessage();
         }

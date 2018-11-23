@@ -16,4 +16,9 @@ public final class ClearAllCmd extends Cmd {
     public byte[] prepareContent() {
         return duplicateArray(clearAllCommandData);
     }
+
+    @Override
+    public String toString() {
+        return "CLEAR_ALL";
+    }
 }

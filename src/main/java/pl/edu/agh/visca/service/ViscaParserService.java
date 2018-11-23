@@ -3,8 +3,8 @@ package pl.edu.agh.visca.service;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.visca.cmd.Cmd;
 import pl.edu.agh.visca.model.CommandFactory;
-import pl.edu.agh.visca.model.CommandName;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class ViscaParserService {
     private final CommandFactory commandFactory;
 
     @SneakyThrows
-    public List<CommandName> parseCommandInput(String input) {
+    public List<Cmd> parseCommandInput(String input) {
         /*if (input.startsWith(MACRO_DEF)) {
             String commands = input.substring(MACRO_DEF.length());
 
