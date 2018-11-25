@@ -58,11 +58,11 @@ public class ViscaService {
     @PostConstruct
     public void setup() {
         //FIXME: changing when we have port connection
-        log.debug("Serial opened!");
+        /*log.debug("Serial opened!");
         serialPort = new SerialPort(serialPortName);
 
         startSerial();
-        configDevice();
+        configDevice();*/
     }
 
     @PreDestroy

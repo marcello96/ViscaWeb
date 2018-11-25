@@ -21,6 +21,6 @@ public final class ChangeAddressCmd extends Cmd {
 
     @Override
     public String toString() {
-        return newAddress != 0 ? "CHANGE_ADDRESS_" + newAddress : "CHANGE_ADDRESS";
+        return "CHANGE_ADDRESS_" + newAddress;
     }
 }
