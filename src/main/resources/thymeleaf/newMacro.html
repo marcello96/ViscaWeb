@@ -13,27 +13,18 @@
     <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
     <script src="https://npmcdn.com/bootstrap@4.0.0-alpha.5/dist/js/bootstrap.min.js"></script>
     <script th:src="@{/resources/vendor/bootstrap4-0-0-alpha-6.min.js}"></script>
-    <script th:src="@{/resources/js/mainPage.js}"></script>
+    <script th:src="@{/resources/js/newMacro.js}"></script>
 
     <style>
         .row {
             margin-top: 15px;
         }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="row">
-        <h1 class="text-center">Controller of camera via VISCA protocol</h1>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-5">
-            <button class="btn btn-warning visca-change-address visca-macro-index">Macro controller</button>
-        </div>
-    </div>
-
     <br>
     <div class="row">
         <section class="col-lg-5">
@@ -154,27 +145,17 @@
 
     <br>
     <div class="row">
-        <div class="col-lg-5">
-            <h3>Destination</h3>
-            <select class="form-control" id="change-destination">
-                <option th:each="i : ${#numbers.sequence(0, 7)}" th:value="${i}" th:text="${i}">
-                </option>
-            </select>
-        </div>
-
-        <section class="col-lg-5">
-            <h3>Change destination</h3>
-            <input type="checkbox" id="check-bok"/>
+        <h3>Macro define</h3>
+        <section class="col-lg-2">
+            <textarea class="commandName"></textarea>
         </section>
+        <section class="col-lg-4">
+            <div class="commandContent"></div>
+        </section>
+        <button class="btn btn-primary col-lg-2 col-md-2 visca-submit-command">Submit</button>
     </div>
 
-    <br>
-    <div class="row">
-        <h3 class="col-lg-5">Response from visca</h3>
-        <section class="col-lg-5">
-            <textarea class="response" rows="2" cols="50"></textarea>
-        </section>
-    </div>
+
 </div>
 
 </body>

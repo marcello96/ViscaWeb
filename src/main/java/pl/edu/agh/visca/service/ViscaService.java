@@ -1,6 +1,5 @@
 package pl.edu.agh.visca.service;
 
-import com.google.common.base.Preconditions;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import lombok.Getter;
@@ -109,17 +108,19 @@ public class ViscaService {
 
     @SneakyThrows
     private void sendCommand(Cmd command) {
-        Preconditions.checkArgument(command.isExecutable());
-
-        byte[] cmdData = command.prepareContent();
-        ViscaCommand vCmd = new ViscaCommand();
-        vCmd.commandData = cmdData;
-        vCmd.sourceAdr = 0;
-        vCmd.destinationAdr = command.isBroadcast() ? Constants.BROADCAST_ADDRESS : Constants.DESTINATION_ADDRESS;
-        cmdData = vCmd.getViscaCommandData();
-        System.out.println("@ " + byteArrayToString(cmdData));
-
-        serialPort.writeBytes(cmdData);
+        try {
+            byte[] cmdData = command.prepareContent();
+            ViscaCommand vCmd = new ViscaCommand();
+            vCmd.commandData = cmdData;
+            vCmd.sourceAdr = 0;
+            vCmd.destinationAdr = command.isBroadcast() ? Constants.BROADCAST_ADDRESS : Constants.DESTINATION_ADDRESS;
+            cmdData = vCmd.getViscaCommandData();
+            System.out.println("@ " + byteArrayToString(cmdData));
+            serialPort.writeBytes(cmdData);
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    String.format("Can not send command %s . Message from port: %s", command.toString(), e.getMessage()));
+        }
     }
 
     @SneakyThrows

@@ -1,4 +1,10 @@
 $(function () {
+    $('textarea').each(function () {
+        this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
 
     $('.visca-position-up').on('click', function () {
         var command = 'UP';
@@ -10,7 +16,7 @@ $(function () {
             'tiltSpeed': tiltSpeed
         };
 
-        postAPI('/position', data);
+        $(".commandContent").append(command).append('_').append(tiltSpeed).append(' ');
     });
 
     $('.visca-position-down').on('click', function () {
@@ -23,8 +29,7 @@ $(function () {
             'tiltSpeed': tiltSpeed
         };
 
-        postAPI('/position', data);
-
+        $(".commandContent").append(command).append("_").append(tiltSpeed).append(' ');
     });
 
     $('.visca-position-left').on('click', function () {
@@ -37,7 +42,7 @@ $(function () {
             'tiltSpeed': tiltSpeed
         };
 
-        postAPI('/position', data);
+        $(".commandContent").append(command).append("_").append(panSpeed).append(' ');
     });
 
     $('.visca-position-right').on('click', function () {
@@ -50,7 +55,7 @@ $(function () {
             'tiltSpeed': tiltSpeed
         };
 
-        postAPI('/position', data);
+        $(".commandContent").append(command).append("_").append(panSpeed).append(' ');
     });
 
     $('.visca-zoom-tele').on('click', function () {
@@ -61,7 +66,7 @@ $(function () {
             'speed': speed
         };
 
-        postAPI('/zoom-tele', data);
+        $(".commandContent").append(command).append("_").append(speed).append(' ');
     });
 
     $('.visca-zoom-wide').on('click', function () {
@@ -72,7 +77,7 @@ $(function () {
             'speed': speed
         };
 
-        postAPI('/zoom-wide', data);
+        $(".commandContent").append(command).append("_").append(speed).append(' ');
     });
 
     $('.visca-other-home').on('click', function () {
@@ -81,10 +86,10 @@ $(function () {
            'command': command
         };
 
-        postAPI('/home', data);
+        $(".commandContent").append(command).append(' ');
     });
 
-     $('.visca-other-wait').on('click', function () {
+    $('.visca-other-wait').on('click', function () {
         var command = 'WAIT';
         var time = $('#time-waiting').eq(0).val();
         var data = {
@@ -92,10 +97,10 @@ $(function () {
                'time': time
         };
 
-        postAPI('/wait', data);
-     });
+        $(".commandContent").append(command).append('_').append(time).append(' ');
+    });
 
-     $('.visca-change-address').on('click', function () {
+    $('.visca-change-address').on('click', function () {
         var command = 'CHANGE_ADDRESS';
         var newAddress = $('#change-address').eq(0).val();
         var data = {
@@ -103,27 +108,32 @@ $(function () {
             'newAddress': newAddress
         };
 
-        postAPI('/address', data);
-     });
-
-     $('.visca-macro-index').on('click', function () {
-        window.location.href = "macroes";
+        $(".commandContent").append(command).append('_').append(newAddress).append(' ');
     });
-});
 
-function postAPI(endpoint, data) {
-    $('.response').val('');
-
-    if ($('#check-bok')[0].checked) {
-        data['address'] = $('#change-destination').eq(0).val();
-    }
-
-    $.ajax({
-        type: 'POST',
-        url: '/controller' + endpoint,
-        data: data,
-        success: function(msg){
-            $('.response').val(msg);
+    $('.visca-submit-command').on('click', function () {
+        if (!$.trim($('.commandName').text()) ) {
+            alert('Name can not be null');
+        }
+        else if (!$.trim($('.commandContent').val())) {
+            alert('Content can not be null');
+        }
+        else {
+            var data = {
+                'macroName' : $('.commandName').text(),
+                'macroContent': $('.commandContent').val()
+            };
+            $.ajax({
+                type: 'PUT',
+                url: '/controller/macro',
+                data: data,
+                success: function(msg){
+                    window.location.href = "/macroes";
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert("Can not parse content");
+                }
+            });
         }
     });
-}
+});

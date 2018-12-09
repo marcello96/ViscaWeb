@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import pl.edu.agh.visca.service.macro.ViscaMacroHolder;
 
+import java.util.HashMap;
+
 @SpringBootApplication
 public class WebApplication {
 
@@ -14,6 +16,6 @@ public class WebApplication {
 
     @Bean
     public ViscaMacroHolder getBeanViscaMacroHolder() {
-        return new ViscaMacroHolder();
+        return new ViscaMacroHolder(new HashMap<>());
     }
 }

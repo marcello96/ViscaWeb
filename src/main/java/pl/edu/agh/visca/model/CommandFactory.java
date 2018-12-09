@@ -64,7 +64,7 @@ public class CommandFactory {
         int pos = inputCommand.indexOf("_");
         WaitCmd cmd = (WaitCmd) CommandName.WAIT.getCommand();
 
-        if(pos != -1) {
+        if (pos != -1) {
             String time = inputCommand.substring(pos + 1);
             cmd.setTime(Integer.parseInt(time));
         }

@@ -3,12 +3,9 @@ package pl.edu.agh.visca.controller.api;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.visca.model.Constants;
 import pl.edu.agh.visca.service.ViscaParserService;
 import pl.edu.agh.visca.service.ViscaService;
@@ -16,39 +13,52 @@ import pl.edu.agh.visca.service.macro.Macro;
 import pl.edu.agh.visca.service.macro.ViscaMacroHolder;
 
 @RestController
-@RequestMapping("/controller/macro")
+@RequestMapping("/controller")
 @AllArgsConstructor
 @Slf4j
 public class MacroController {
+    private static final String OK = "ok";
 
     private final ViscaService viscaService;
     private final ViscaParserService viscaParserService;
     private final ViscaMacroHolder viscaMacroHolder;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/macro", method = RequestMethod.POST)
     public ResponseEntity addMacro(@RequestParam String macroName,
                                    @RequestParam String macroContent,
                                    @RequestParam(defaultValue = "1") String address) {
         Constants.DESTINATION_ADDRESS = Byte.parseByte(address);
-        String response = "OK";
         try {
-            if (StringUtils.isBlank(macroName) || StringUtils.isBlank(macroContent))
-                throw new IllegalArgumentException("Can not create macro for empty macroName or macroContent");
-
             val commandNames = viscaParserService.parseCommandInput(macroContent.trim());
             viscaMacroHolder.addMacro(new Macro(macroName, commandNames));
-            //response = viscaService.runCommandList(commandNames);
         } catch (Exception e) {
-            response = e.getMessage();
+            return new ResponseEntity<>("Can not parse the content", HttpStatus.BAD_REQUEST);
         }
 
-        log.debug("Response: " + response);
+        log.debug("Response: " + OK);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(OK);
     }
 
-    @RequestMapping(value = "/run", method = RequestMethod.POST)
-    public ResponseEntity runMacro(@RequestParam String macroName) {
+    @RequestMapping(value = "/macro", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateMacro(@RequestParam String macroName,
+                                              @RequestParam String macroContent,
+                                              @RequestParam(defaultValue = "1") String address) {
+        Constants.DESTINATION_ADDRESS = Byte.parseByte(address);
+        try {
+            val commandNames = viscaParserService.parseCommandInput(macroContent.trim());
+            viscaMacroHolder.addMacro(new Macro(macroName, commandNames));
+        } catch (Exception e) {
+            return new ResponseEntity<>("Can not parse the content", HttpStatus.BAD_REQUEST);
+        }
+
+        log.debug("Response: " + OK);
+
+        return ResponseEntity.ok(OK);
+    }
+
+    @RequestMapping(value = "/macro/{macroName}", method = RequestMethod.POST)
+    public ResponseEntity runMacro(@PathVariable String macroName) {
         String response;
         try {
             val macro = viscaMacroHolder.getMacro(macroName);
@@ -59,6 +69,19 @@ public class MacroController {
 
         log.debug("Response: " + response);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(value = "/macro/{macroName}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteMacro(@PathVariable String macroName) {
+        String response;
+        try {
+            response = Boolean.toString(viscaMacroHolder.deleteMacro(macroName));
+        } catch (Exception e) {
+            response = e.getMessage();
+        }
+
+        log.debug("Response: " + response);
         return ResponseEntity.ok(response);
     }
 }
