@@ -114,9 +114,8 @@ $(function () {
 function postAPI(endpoint, data) {
     $('.response').val('');
 
-    if ($('#check-bok')[0].checked) {
-        data['address'] = $('#change-destination').eq(0).val();
-    }
+
+    data['address'] = $('#change-destination').eq(0).val();
 
     $.ajax({
         type: 'POST',

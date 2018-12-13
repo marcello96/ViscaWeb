@@ -50,6 +50,6 @@ public final class ZoomWideStdCmd extends Cmd {
 
     @Override
     public String toString() {
-        return "ZOOM_WIDE" + speed.name();
+        return "ZOOM_WIDE_" + speed.name();
     }
 }

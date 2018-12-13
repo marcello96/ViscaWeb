@@ -27,6 +27,7 @@ public class MacroController {
     public ResponseEntity addMacro(@RequestParam String macroName,
                                    @RequestParam String macroContent,
                                    @RequestParam(defaultValue = "1") String address) {
+
         Constants.DESTINATION_ADDRESS = Byte.parseByte(address);
         try {
             val commandNames = viscaParserService.parseCommandInput(macroContent.trim());

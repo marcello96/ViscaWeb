@@ -111,6 +111,17 @@ $(function () {
         $(".commandContent").append(command).append('_').append(newAddress).append(' ');
     });
 
+    $('.visca-change-destination').on('click', function () {
+        var command = 'SET_DEST';
+        var newAddress = $('#change-destination').eq(0).val();
+        var data = {
+            'command': command,
+            'newAddress': newAddress
+        };
+
+        $(".commandContent").append(command).append('_').append(newAddress).append(' ');
+    });
+
     $('.visca-submit-command').on('click', function () {
         if (!$.trim($('.commandName').text()) ) {
             alert('Name can not be null');

@@ -144,7 +144,7 @@
         <div class="col-lg-5">
             <h3>Address</h3>
             <select class="form-control" id="change-address">
-                <option th:each="i : ${#numbers.sequence(0, 7)}" th:value="${i}" th:text="${i}">
+                <option th:each="i : ${#numbers.sequence(1, 7)}" th:value="${i}" th:text="${i}">
                 </option>
             </select>
         </div>
@@ -157,12 +157,28 @@
 
     <br>
     <div class="row">
+        <div class="col-lg-5">
+            <h3>Destination</h3>
+            <select class="form-control" id="change-destination">
+                <option th:each="i : ${#numbers.sequence(0, 7)}" th:value="${i}" th:text="${i}">
+                </option>
+            </select>
+        </div>
+
+        <section class="col-lg-5">
+            <h3>Change Destination</h3>
+            <button type="button" class="btn btn-warning visca-change-destination">Change Destination</button>
+        </section>
+    </div>
+
+    <br>
+    <div class="row">
         <h3>Macro define</h3>
         <section class="col-lg-2">
             <div class="commandName" th:value="${macro.name}" th:text="${macro.name}"></div>
         </section>
         <section class="col-lg-4">
-            <textarea class="commandContent" th:text="${macro.getContentAsString()} "></textarea>
+            <textarea class="commandContent" th:text="${macro.getContentAsString()} + ' '"></textarea>
         </section>
         <button class=" btn btn-primary col-lg-2 col-md-2 visca-submit-command">Submit</button>
     </div>

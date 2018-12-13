@@ -141,7 +141,7 @@
         <div class="col-lg-5">
             <h3>Address</h3>
             <select class="form-control" id="change-address">
-                <option th:each="i : ${#numbers.sequence(0, 7)}" th:value="${i}" th:text="${i}">
+                <option th:each="i : ${#numbers.sequence(1, 7)}" th:value="${i}" th:text="${i}">
                 </option>
             </select>
         </div>
@@ -161,11 +161,6 @@
                 </option>
             </select>
         </div>
-
-        <section class="col-lg-5">
-            <h3>Change destination</h3>
-            <input type="checkbox" id="check-bok"/>
-        </section>
     </div>
 
     <br>
